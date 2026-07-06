@@ -16,7 +16,7 @@ const tweetSchema = new mongoose.Schema({
         trim: true
     },
     image: {
-        type: buffer
+        type: Buffer
     },
     likes: {
         type: Array,
