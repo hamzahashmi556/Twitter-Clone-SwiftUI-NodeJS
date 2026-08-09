@@ -78,6 +78,17 @@ userSchema.pre('save', async function (next) {
 
     // next
 })
+
+// Relationship between Tweets & the User
+userSchema.virtual('tweets', {
+    // Look inside:
+    ref: 'Tweet',
+    // Take:
+    localField: '_id',
+    // Compare it against:
+    foreignField: 'user'
+})
+
 const User = mongoose.model("User", userSchema)
 
 module.exports = User
