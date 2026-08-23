@@ -1,8 +1,17 @@
 const express = require('express')
 const User = require("../models/user")
+const multer = require('multer');
+const sharp = require('sharp');
 
+// Original Router
 const router = new express.Router()
 
+// Helpers
+const upload = multer({
+    limits: {
+        fileSize: 1000000000
+    }
+})
 
 // Create the User
 router.post("/users", async (req, res) => {
@@ -77,6 +86,44 @@ router.get('/users/:id', async (req, res) => {
         res.status(500).send(e)
     }
 })
+
+// Upload User Picture
+router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
+    // try {
+    // console.log("uploading picture start")
+    // const user = await User.findById(req.params.id)
+
+    // if (!user) {
+    //     return res.status(404).send('No User Found')
+    // }
+
+    // if (!req.file) {
+    //     return res.status(400).send('Please upload an image')
+    // }
+
+    // console.log("user record found")
+
+    const buffer = await sharp(req.file.buffer)
+        .resize({ width: 250, height: 250 })
+        .png()
+        .toBuffer()
+
+    // console.log("buffer multipart form completed")
+
+
+    // user.avatar = buffer
+    // user.avatarExists = true
+    // await user.save()
+
+    // console.log("user record found")
+
+    res.send(buffer)
+    // } catch (e) {
+    //     res.status(400).send(e.message)
+    // }
+}, (error, req, res, next) => {
+    console.log("error uploading field " + error.message)
+    res.status(400).send({ error: error })
 })
 
 module.exports = router
