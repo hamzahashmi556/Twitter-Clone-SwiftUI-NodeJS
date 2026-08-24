@@ -120,7 +120,25 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
     }
 }, (error, req, res, next) => {
     console.log("error uploading field " + error.message)
-    res.status(400).send({ error: error })
+    res.status(400).send({ error: error.message })
+})
+
+router.get('/users/:id/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if (!user) {
+            throw new Error("The User does not exist")
+        }
+        else if (!user.avatar) {
+            return res.status(404).send({ "user": user, "error": "no avatar" })
+            // throw new Error("The User does not have profile picture")
+        }
+        res.set('Content-Type', 'image/jpg')
+        res.send(user.avatar)
+    }
+    catch (error) {
+        res.status(404).send(error.message)
+    }
 })
 
 module.exports = router
