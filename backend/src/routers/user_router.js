@@ -123,6 +123,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
     res.status(400).send({ error: error.message })
 })
 
+// Get Profile Picture
 router.get('/users/:id/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
@@ -138,6 +139,64 @@ router.get('/users/:id/avatar', async (req, res) => {
     }
     catch (error) {
         res.status(404).send(error.message)
+    }
+})
+
+// Route for following
+router.put('/users/:id/follow', auth, async (req, res) => {
+    const myId = req.user.id
+    const userId = req.params.id
+    console.log('user id 1 ' + myId)
+    console.log('user id 2 ' + userId)
+    if (myId != userId) {
+        try {
+            const user = await User.findById(userId)
+            if (!user.followers.includes(myId)) {
+                // insert my id in his followers
+                await user.updateOne({ $push: { followers: myId } })
+                // insert his id in my following
+                await req.user.updateOne({ $push: { followings: userId } })
+                res.status(200).send('you followed ' + user.name)
+            }
+            else {
+                res.status(403).send('you aree already following ' + user.name)
+            }
+
+        }
+        catch (error) {
+            res.status(500).json(error)
+        }
+    } else {
+        res.status(403).send('Cannot unfollow your own user')
+    }
+})
+
+// Unfollow User
+router.put('/users/:id/unfollow', auth, async (req, res) => {
+    const myId = req.user.id
+    const userId = req.params.id
+    console.log('user id 1 ' + myId)
+    console.log('user id 2 ' + userId)
+    if (myId != userId) {
+        try {
+            const user = await User.findById(userId)
+            if (user.followers.includes(myId)) {
+                // remove my id in his followers
+                await user.updateOne({ $pull: { followers: myId } })
+                // remove his id in my following
+                await req.user.updateOne({ $pull: { followings: userId } })
+                res.status(200).send('you unfollowed ' + user.name)
+            }
+            else {
+                res.status(403).send('cannot unfollow, you don\'t follow ' + user.name)
+            }
+
+        }
+        catch (error) {
+            res.status(500).json(error)
+        }
+    } else {
+        res.status(400).send('Cannot unfollow your own id')
     }
 })
 
