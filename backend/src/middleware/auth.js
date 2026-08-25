@@ -6,7 +6,7 @@ const privateKey = "ramza@556"
 const auth = async (req, res, next) => {
     try {
         const token = req.header('Authorization').replace('Bearer ', '')
-        console.log('Token Found ' + token)
+        // console.log('Token Found')
         const decoded = jwt.verify(token, privateKey)
         console.log('Token Decoded & verified')
         const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
