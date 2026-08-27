@@ -1,16 +1,16 @@
+require("./db/mongoose")
 
 const express = require('express')
-const Tweet = require('./models/tweet')
 
 const userRouter = require('./routers/user_router')
-
-require("./db/mongoose")
+const tweetRouter = require('./routers/tweet_router')
 
 const app = express()
 
 app.use(express.json())
 
 app.use(userRouter)
+app.use(tweetRouter);
 
 const port = process.env.PORT || 3000
 
