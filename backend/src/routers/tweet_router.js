@@ -88,4 +88,15 @@ router.get('/tweet/image/:id', auth, async (req, res) => {
         return res.status(500).send(error.message)
     }
 })
+
+// Get Tweets
+router.get('/tweets', async (req, res) => {
+    try {
+        const tweets = await Tweet.find({})
+        return res.status(200).send(tweets)
+    }
+    catch (error) {
+        res.status(400).send(error.message)
+    }
+})
 module.exports = router
