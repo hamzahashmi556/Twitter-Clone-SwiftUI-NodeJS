@@ -114,4 +114,47 @@ router.get('/tweets/:id', auth, async (req, res) => {
         return res.status(500).send(error.message)
     }
 })
+
+// Like Tweet
+router.post('/tweets/:id/like', auth, async (req, res) => {
+    const userId = req.user.id
+    const tweetId = req.params.id
+    try {
+        const tweet = await Tweet.findById(tweetId)
+        if (!tweet) {
+            return res.status(404).send('tweet is missing from server')
+        }
+        if (tweet.likes.includes(userId)) {
+            return res.status(400).send('You already liked this tweet')
+        }
+        await tweet.updateOne({ $push: { likes: userId } })
+        return res.status(200).send('Tweet has been liked')
+    }
+    catch (error) {
+        res.status(500).json(error.message)
+    }
+
+})
+
+// Unlike Tweet
+router.post('/tweets/:id/unlike', auth, async (req, res) => {
+    const userId = req.user.id
+    const tweetId = req.params.id
+    try {
+        const tweet = await Tweet.findById(tweetId)
+        if (!tweet) {
+            return res.status(404).send('tweet is missing from server')
+        }
+        if (!tweet.likes.includes(userId)) {
+            return res.status(400).send('You already unliked this tweet')
+        }
+        await tweet.updateOne({ $pull: { likes: userId } })
+        return res.status(200).send('Tweet has been unliked')
+    }
+    catch (error) {
+        res.status(500).json(error.message)
+    }
+
+})
+
 module.exports = router
