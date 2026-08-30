@@ -99,4 +99,19 @@ router.get('/tweets', async (req, res) => {
         res.status(400).send(error.message)
     }
 })
+
+// Get User Tweets
+router.get('/tweets/:id', auth, async (req, res) => {
+    const userId = req.params.id
+    try {
+        const tweets = await Tweet.find({ userId: userId })
+        if (!tweets) {
+            return res.status(404).send("No Tweets found for this user")
+        }
+        return res.status(200).send(tweets)
+    }
+    catch (error) {
+        return res.status(500).send(error.message)
+    }
+})
 module.exports = router
