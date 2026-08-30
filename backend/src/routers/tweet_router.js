@@ -70,4 +70,22 @@ router.post('/tweet/uploadImage/:id', auth, uploader.single('image'), async (req
 }, (error, req, res, next) => {
     res.status(400).send({ error: error.message })
 })
+
+// Get Tweet Image
+router.get('/tweet/image/:id', auth, async (req, res) => {
+    try {
+        const id = req.params.id
+        const tweet = await Tweet.findById(id)
+        if (!tweet) {
+            return res.status(404).send('Tweet Missing from database')
+        } else if (!tweet.image) {
+            return res.status(404).send('Image Missing from tweet')
+        }
+        res.set('Content-Type', 'image/jpg')
+        res.send(tweet.image)
+    }
+    catch (error) {
+        return res.status(500).send(error.message)
+    }
+})
 module.exports = router
