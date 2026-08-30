@@ -95,6 +95,25 @@ userSchema.virtual('tweets', {
     foreignField: 'user'
 })
 
+// Relationship between Notifications & the User
+userSchema.virtual('notificationSent', {
+    // Look inside:
+    ref: 'Notification',
+    // Take:
+    localField: '_id',
+    // Compare it against:
+    foreignField: 'senderId'
+})
+
+userSchema.virtual('notificationReceived', {
+    // Look inside:
+    ref: 'Notification',
+    // Take:
+    localField: '_id',
+    // Compare it against:
+    foreignField: 'receiverId'
+})
+
 // Authentication
 userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({ email })
