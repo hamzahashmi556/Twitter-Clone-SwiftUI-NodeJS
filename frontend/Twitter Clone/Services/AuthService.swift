@@ -10,6 +10,8 @@ import Foundation
 protocol AuthServiceProtocol {
     
     func register(value: UserRequest) async throws -> UserResponse
+    
+    func login(request: LoginRequest) async throws -> LoginResponse
 }
 
 class AuthService: AuthServiceProtocol {
@@ -22,6 +24,12 @@ class AuthService: AuthServiceProtocol {
         "Content-Type" : "application/json",
         "Accept" : "application/json"
     ]
+    
+    func login(request: LoginRequest) async throws -> LoginResponse {
+        let body = try JSONEncoder().encode(request)
+        let endpoint = baseURL + "/login"
+        return try await client.request(endpoint, method: .post, headers: headers, body: body)
+    }
     
     func register(value: UserRequest) async throws -> UserResponse {
         let data = try JSONEncoder().encode(value)

@@ -10,8 +10,8 @@ struct UserResponse: Decodable, Identifiable {
     var _id: String
     var name: String
     var userName: String
-    var tokens: [String]
-    var token: String?
+//    var tokens: [String]
+//    var token: String?
     var email: String
     var password: String?
     var avatar: String?
@@ -32,4 +32,14 @@ struct UserRequest: Encodable {
     var bio: String?
     var website: String?
     var location: String?
+}
+
+struct LoginRequest: Encodable {
+    var email: String
+    var password: String
+}
+
+struct LoginResponse: Decodable {
+    var token: String
+    var user: UserResponse
 }

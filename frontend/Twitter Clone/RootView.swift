@@ -12,7 +12,8 @@ struct RootView: View {
     let authService: AuthServiceProtocol = AuthService()
     @StateObject private var alertManager = AlertManager.shared
     var body: some View {
-        RegisterView(authService: authService)
+//        RegisterView(authService: authService)
+        LogInView(authService: authService)
             .alert(alertManager.errorMsg, isPresented: $alertManager.isPresented) {
                 Button("OK") {
                     alertManager.isPresented = false
