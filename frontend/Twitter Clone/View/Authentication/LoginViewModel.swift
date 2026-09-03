@@ -44,6 +44,7 @@ final class LoginViewModel: ObservableObject {
                 let request = LoginRequest(email: email, password: password)
                 let response = try await service.login(request: request)
                 UserDefaults.jwt = response.token
+                UserDefaults.userID = response.user.id
                 AlertManager.shared.showAlert(message: "Logged in successfully.")
                 print("Login Complete: \(response)")
             } catch {
