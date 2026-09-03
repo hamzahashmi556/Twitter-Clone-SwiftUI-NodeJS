@@ -6,15 +6,16 @@
 //
 
 import Foundation
+import Combine
 
-class CreateTweetViewModel: ObservableObject {
-    
-    func uploadPost(text: String) {
-        
-        RequestServices.requestDomain = "http://localhost:3000/tweets"
-        
-        RequestServices.postTweet(text: text, user: "Cem") { (res) in
-            print("Tweet saved")
-        }
-    }   
-}
+//class CreateTweetViewModel: ObservableObject {
+//    
+//    func uploadPost(text: String) {
+//        
+//        RequestServices.requestDomain = "http://localhost:3000/tweets"
+//        
+//        RequestServices.postTweet(text: text, user: "Cem") { (res) in
+//            print("Tweet saved")
+//        }
+//    }   
+//}

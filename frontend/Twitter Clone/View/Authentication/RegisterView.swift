@@ -9,9 +9,11 @@ import SwiftUI
 
 struct RegisterView: View {
     
-    @State var name = ""
-    @State var email = ""
-    @State var birthDate = ""
+    @StateObject private var vm: RegisterViewModel
+    
+    init(authService: AuthServiceProtocol) {
+        self._vm = StateObject(wrappedValue: RegisterViewModel(service: authService))
+    }
     
     var body: some View {
         VStack {
@@ -24,7 +26,7 @@ struct RegisterView: View {
                         Text("Cancel")
                             .foregroundColor(.blue)
                     })
-                        
+                    
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -42,9 +44,10 @@ struct RegisterView: View {
                 .padding(.top, 35)
             
             VStack(alignment: .leading) {
-                CustomAuthTextField(placeHolder: "Name", text: $name)
-                CustomAuthTextField(placeHolder: "Phone number or email address", text: $email)
-                CustomAuthTextField(placeHolder: "Date of birth", text: $birthDate)
+                CustomAuthTextField(placeHolder: "Username", text: $vm.userName)
+                CustomAuthTextField(placeHolder: "Name", text: $vm.name)
+                CustomAuthTextField(placeHolder: "Phone number or email address", text: $vm.email)
+                CustomAuthTextField(placeHolder: "Password", text: $vm.password)
             }
             
             Spacer(minLength: 0)
@@ -61,7 +64,7 @@ struct RegisterView: View {
                     Spacer()
                     
                     Button(action: {
-                        
+                        vm.register()
                     }, label: {
                         Capsule()
                             .frame(width: 60, height: 30, alignment: .center)
@@ -76,11 +79,10 @@ struct RegisterView: View {
                 }
             }
         }
-    }
-}
-
-struct RegisterView_Previews: PreviewProvider {
-    static var previews: some View {
-        RegisterView()
+        .overlay {
+            if vm.isLoading {
+                ProgressView()
+            }
+        }
     }
 }
