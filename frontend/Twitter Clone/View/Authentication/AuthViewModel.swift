@@ -96,8 +96,12 @@ final class AuthViewModel: ObservableObject {
     private func fetchUser(id: String) {
         self.isLoading = true
         Task.detached { @MainActor in
-            if let user = try? await self.userService.getUser(id: id) {
+            do {
+                let user = try await self.userService.getUser(id: id)
                 self.currentUser = user
+            }
+            catch {
+                print("Unable to get user: \(error)")
             }
             self.isLoading = false
         }

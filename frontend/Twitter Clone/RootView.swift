@@ -14,11 +14,18 @@ struct RootView: View {
     
     @StateObject var authVM: AuthViewModel
     
+    init(authService: AuthServiceProtocol, userService: UserServiceProtocol) {
+        self._authVM = StateObject(
+            wrappedValue: AuthViewModel(authService: authService, userService: userService)
+        )
+    }
+    
     var body: some View {
         
         ZStack {
             if authVM.isAuthenticated {
-                MainView(user: authVM.currentUser)
+                MainView()
+                    .environmentObject(authVM)
             }
             else {
                 NavigationStack {

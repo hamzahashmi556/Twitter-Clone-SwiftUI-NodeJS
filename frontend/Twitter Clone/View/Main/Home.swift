@@ -9,6 +9,9 @@ import SwiftUI
 
 struct Home : View {
     
+    @EnvironmentObject private var container: AppContainer
+    @EnvironmentObject private var authVM: AuthViewModel
+    
     @Binding var x : CGFloat
     @State var showCreateTweet = false
     @State var selectedIndex = 0
@@ -101,16 +104,16 @@ struct Home : View {
                         
                         Spacer()
                         
-                        Button(action: {
-                            
-                            self.showCreateTweet.toggle()
-                            
-                        }) {
-                            
-                            Image("tweet").renderingMode(.template).resizable().frame(width: 20, height: 20).padding()
-                        }.background(Color("bg"))
-                        .foregroundColor(.white)
-                        .clipShape(Circle())
+                        if authVM.currentUser != nil {
+                            Button(action: {
+                                self.showCreateTweet.toggle()
+                            }) {
+                                Image("tweet").renderingMode(.template).resizable().frame(width: 20, height: 20).padding()
+                            }
+                            .background(Color("bg"))
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
+                        }
                         
                     }.padding()
                     
@@ -118,8 +121,9 @@ struct Home : View {
                 
             }
             .sheet(isPresented: $showCreateTweet) {
-                
-                CreateTweet(show: self.$showCreateTweet)
+                if let user = authVM.currentUser {
+                    CreateTweet(tweetService: container.tweetService, user: user)
+                }
             }
         }
         

@@ -14,8 +14,6 @@ struct MainView: View {
     // to hide view...
     @State var x = -UIScreen.main.bounds.width + 90
     
-    let user: UserModel?
-    
     var body: some View {
         
         NavigationView {
@@ -29,8 +27,6 @@ struct MainView: View {
                         Home(x: $x)
                         
                     }
-                    
-                    
                     
                     SlideMenu()
                         .shadow(color: Color.black.opacity(x != 0 ? 0.1 : 0), radius: 5, x: 5, y: 0)

@@ -9,8 +9,13 @@ import SwiftUI
 
 struct CreateTweet : View {
     
-    @Binding var show : Bool
-    @State var text = ""
+    @StateObject private var vm: CreateTweetViewModel
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    init(tweetService: TweetServiceProtocol, user: UserModel) {
+        self._vm = StateObject(wrappedValue: CreateTweetViewModel(service: tweetService, user: user))
+    }
 
     var body : some View {
 
@@ -19,31 +24,32 @@ struct CreateTweet : View {
             HStack{
                 
                 Button(action: {
-                        
-                    self.show.toggle()
-                    
+                    dismiss()
                 }) {
-                    
                     Text("Cancel")
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    
-                    self.show.toggle()
-                    
+                    vm.post { tweet in
+                        dismiss()
+                    }
                 }) {
-                    
                     Text("Tweet").padding()
-                    
                 }.background(Color("bg"))
                 .foregroundColor(.white)
                 .clipShape(Capsule())
             }
             
-            MultilineTextField(text: $text)
+            MultilineTextField(text: $vm.text)
             
-        }.padding()
+        }
+        .padding()
+        .overlay {
+            if vm.isLoading {
+                ProgressView()
+            }
+        }
     }
 }

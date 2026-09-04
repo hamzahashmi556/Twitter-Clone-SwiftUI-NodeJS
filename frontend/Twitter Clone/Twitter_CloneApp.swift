@@ -10,8 +10,7 @@ import SwiftUI
 @main
 struct Twitter_CloneApp: App {
     
-    let authService: AuthServiceProtocol = AuthService()
-    let userService: UserServiceProtocol = UserService()
+    @StateObject private var container = AppContainer()
     
     init() {
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
@@ -21,11 +20,10 @@ struct Twitter_CloneApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(
-                authVM: AuthViewModel(
-                    authService: authService,
-                    userService: userService
-                ),
+                authService: container.authService,
+                userService: container.userService
             )
+            .environmentObject(container)
         }
     }
 }
