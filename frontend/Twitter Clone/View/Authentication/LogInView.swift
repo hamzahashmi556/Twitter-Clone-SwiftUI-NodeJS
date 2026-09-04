@@ -9,7 +9,8 @@ import SwiftUI
 
 struct LogInView: View {
     
-    @ObservedObject private var vm: AuthViewModel
+    @ObservedObject var vm: AuthViewModel
+    @Environment(\.dismiss) private var dismiss
     
     @State private var email = ""
     @State private var password = ""
@@ -20,24 +21,6 @@ struct LogInView: View {
             if !emailDone {
                 VStack {
                     VStack {
-                        ZStack {
-                            HStack {
-                                Button(action: {
-                                }, label: {
-                                    Text("Cancel")
-                                        .foregroundColor(.blue)
-                                })
-
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-
-                            Image("Twitter")
-                                .resizable()
-                                .scaledToFill()
-                                .padding(.trailing)
-                                .frame(width: 20, height: 20)
-                        }
 
                         Text("To get started first enter your phone, email, or @username")
                             .font(.title2)
@@ -69,24 +52,6 @@ struct LogInView: View {
             } else {
                 VStack {
                     VStack {
-                        ZStack {
-                            HStack {
-                                Button(action: {
-                                }, label: {
-                                    Text("Cancel")
-                                        .foregroundColor(.blue)
-                                })
-
-                                Spacer()
-                            }
-                            .padding(.horizontal)
-
-                            Image("Twitter")
-                                .resizable()
-                                .scaledToFill()
-                                .padding(.trailing)
-                                .frame(width: 20, height: 20)
-                        }
 
                         Text("Enter your password")
                             .font(.title2)
@@ -116,9 +81,14 @@ struct LogInView: View {
                     }
                 }
             }
-
-            if vm.isLoading {
-                ProgressView()
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Image("Twitter")
+                    .resizable()
+                    .scaledToFill()
+                    .padding(.trailing)
+                    .frame(width: 20, height: 20)
             }
         }
     }

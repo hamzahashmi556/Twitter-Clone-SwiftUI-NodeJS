@@ -5,7 +5,7 @@
 //  Created by PSG-MDU-HAMZA on 03/09/2026.
 //
 
-struct UserResponse: Decodable, Identifiable {
+struct UserModel: Decodable, Identifiable {
     var id: String { return _id }
     var _id: String
     var name: String
@@ -41,5 +41,5 @@ struct LoginRequest: Encodable {
 
 struct LoginResponse: Decodable {
     var token: String
-    var user: UserResponse
+    var user: UserModel
 }

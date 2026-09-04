@@ -14,6 +14,8 @@ struct MainView: View {
     // to hide view...
     @State var x = -UIScreen.main.bounds.width + 90
     
+    let user: UserModel?
+    
     var body: some View {
         
         NavigationView {

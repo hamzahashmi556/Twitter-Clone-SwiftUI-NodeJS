@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 
 struct RootView: View {
-        
+    
     @StateObject private var alertManager = AlertManager.shared
     
     @StateObject var authVM: AuthViewModel
@@ -18,10 +18,20 @@ struct RootView: View {
         
         ZStack {
             if authVM.isAuthenticated {
-                MainView()
+                MainView(user: authVM.currentUser)
             }
             else {
-                WelcomeView()
+                NavigationStack {
+                    WelcomeView()
+                        .navigationDestination(for: AuthRoute.self) { destination in
+                            switch destination {
+                            case .login:
+                                LogInView(vm: authVM)
+                            case .register:
+                                RegisterView(vm: authVM)
+                            }
+                        }
+                }
             }
             
             if authVM.isLoading {

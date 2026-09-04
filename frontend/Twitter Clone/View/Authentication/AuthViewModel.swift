@@ -11,7 +11,7 @@ import Foundation
 final class AuthViewModel: ObservableObject {
     
     @Published private(set) var isAuthenticated = false
-    @Published private(set) var currentUser: UserResponse? = nil
+    @Published private(set) var currentUser: UserModel? = nil
     @Published private(set) var isLoading = false
     
     private let authService: AuthServiceProtocol
@@ -42,7 +42,9 @@ final class AuthViewModel: ObservableObject {
                 let response = try await authService.login(request: request)
                 UserDefaults.jwt = response.token
                 UserDefaults.userID = response.user.id
-                AlertManager.shared.showAlert(message: "Logged in successfully.")
+                self.isAuthenticated = true
+                self.currentUser = response.user
+//                AlertManager.shared.showAlert(message: "Logged in successfully.")
                 print("Login Complete: \(response)")
             } catch {
                 AlertManager.shared.showAlert(
@@ -64,8 +66,10 @@ final class AuthViewModel: ObservableObject {
                     password: password,
                 )
                 let response = try await authService.register(value: value)
-                print("Register Complete: \(response)")
-                AlertManager.shared.showAlert(message: "User Registered.")
+                self.isAuthenticated = true
+                self.currentUser = response
+                print("Register Completed: \(response)")
+//                AlertManager.shared.showAlert(message: "User Registered.")
                 
             }
             catch {
@@ -78,10 +82,21 @@ final class AuthViewModel: ObservableObject {
         }
     }
     
+    func logout() {
+        
+        // remove jwt & userid cache
+        UserDefaults.standard.dictionaryRepresentation().keys.forEach({ key in
+            UserDefaults.standard.removeObject(forKey: key)
+        })
+        
+        self.isAuthenticated = false
+        self.currentUser = nil
+    }
+    
     private func fetchUser(id: String) {
         self.isLoading = true
-        Task { @MainActor in
-            if let user = try? await userService.getUser(id: id) {
+        Task.detached { @MainActor in
+            if let user = try? await self.userService.getUser(id: id) {
                 self.currentUser = user
             }
             self.isLoading = false

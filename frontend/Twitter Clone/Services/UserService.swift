@@ -7,7 +7,7 @@
 
 protocol UserServiceProtocol {
     
-    func getUser(id: String) async throws -> UserResponse
+    func getUser(id: String) async throws -> UserModel
 }
 
 final class UserService: UserServiceProtocol {
@@ -16,7 +16,7 @@ final class UserService: UserServiceProtocol {
     
     private let baseURL = "http://localhost:3000/users"
     
-    func getUser(id: String) async throws -> UserResponse {
+    func getUser(id: String) async throws -> UserModel {
         let endpoint = baseURL + "/" + id
         return try await client.request(endpoint, method: .get, headers: [:], body: nil)
     }

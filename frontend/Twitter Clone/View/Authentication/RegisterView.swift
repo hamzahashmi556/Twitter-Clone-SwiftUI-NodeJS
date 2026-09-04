@@ -15,29 +15,10 @@ struct RegisterView: View {
     @State private var password = ""
     
     @ObservedObject var vm: AuthViewModel
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack {
-            ZStack {
-                
-                HStack {
-                    Button(action: {
-                        
-                    }, label: {
-                        Text("Cancel")
-                            .foregroundColor(.blue)
-                    })
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
-                
-                Image("Twitter")
-                    .resizable()
-                    .scaledToFill()
-                    .padding(.trailing)
-                    .frame(width: 20, height: 20)
-            }
             
             Text("Create your account")
                 .font(.title)
@@ -80,9 +61,13 @@ struct RegisterView: View {
                 }
             }
         }
-        .overlay {
-            if vm.isLoading {
-                ProgressView()
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Image("Twitter")
+                    .resizable()
+                    .scaledToFill()
+                    .padding(.trailing)
+                    .frame(width: 20, height: 20)
             }
         }
     }
