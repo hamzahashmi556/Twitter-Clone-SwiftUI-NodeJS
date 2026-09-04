@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct LogInView: View {
-    @StateObject private var vm: LoginViewModel
-
-    init(authService: AuthServiceProtocol) {
-        self._vm = StateObject(wrappedValue: LoginViewModel(service: authService))
-    }
+    
+    @ObservedObject private var vm: AuthViewModel
+    
+    @State private var email = ""
+    @State private var password = ""
+    @State private var emailDone = false
 
     var body: some View {
         ZStack {
-            if !vm.emailDone {
+            if !emailDone {
                 VStack {
                     VStack {
                         ZStack {
@@ -45,14 +46,14 @@ struct LogInView: View {
                             .padding(.horizontal)
                             .padding(.top)
 
-                        CustomAuthTextField(placeHolder: "Phone, email, or username", text: $vm.email)
+                        CustomAuthTextField(placeHolder: "Phone, email, or username", text: $email)
                     }
 
                     Spacer(minLength: 0)
 
                     VStack {
                         Button(action: {
-                            vm.continueToPasswordStep()
+                            continueToPasswordStep()
                         }, label: {
                             Capsule()
                                 .frame(width: 360, height: 40, alignment: .center)
@@ -94,14 +95,14 @@ struct LogInView: View {
                             .padding(.horizontal)
                             .padding(.top)
 
-                        CustomAuthTextField(placeHolder: "Password", text: $vm.password)
+                        CustomAuthTextField(placeHolder: "Password", text: $password)
                     }
 
                     Spacer(minLength: 0)
 
                     VStack {
                         Button(action: {
-                            vm.login()
+                            vm.login(email: email, password: password)
                         }, label: {
                             Capsule()
                                 .frame(width: 360, height: 40, alignment: .center)
@@ -121,10 +122,15 @@ struct LogInView: View {
             }
         }
     }
-}
+    
+    func continueToPasswordStep() {
+        guard !email.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            AlertManager.shared.showAlert(message: "Please enter your email or username.")
+            return
+        }
 
-struct LogInView_Previews: PreviewProvider {
-    static var previews: some View {
-        LogInView(authService: AuthService())
+        withAnimation {
+            emailDone = true
+        }
     }
 }

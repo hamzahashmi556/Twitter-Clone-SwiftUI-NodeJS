@@ -21,8 +21,10 @@ struct Twitter_CloneApp: App {
     var body: some Scene {
         WindowGroup {
             RootView(
-                authVM: AuthViewModel(userService: userService),
-                authService: authService
+                authVM: AuthViewModel(
+                    authService: authService,
+                    userService: userService
+                ),
             )
         }
     }

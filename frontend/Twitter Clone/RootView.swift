@@ -14,8 +14,6 @@ struct RootView: View {
     
     @StateObject var authVM: AuthViewModel
     
-    let authService: AuthServiceProtocol
-    
     var body: some View {
         
         ZStack {
@@ -23,7 +21,7 @@ struct RootView: View {
                 MainView()
             }
             else {
-                LogInView(authService: authService)
+                WelcomeView()
             }
             
             if authVM.isLoading {
@@ -36,33 +34,6 @@ struct RootView: View {
                 alertManager.isPresented = false
                 alertManager.errorMsg.removeAll()
             }
-        }
-    }
-}
-
-final class AuthViewModel: ObservableObject {
-    
-    @Published private(set) var isAuthenticated = false
-    @Published private(set) var currentUser: UserResponse? = nil
-    @Published private(set) var isLoading = false
-    
-    private let userService: UserServiceProtocol
-    
-    init(userService: UserServiceProtocol) {
-        self.isAuthenticated = UserDefaults.jwt != nil
-        self.userService = userService
-        if let userID = UserDefaults.userID {
-            self.fetchUser(id: userID)
-        }
-    }
-    
-    private func fetchUser(id: String) {
-        self.isLoading = true
-        Task { @MainActor in
-            if let user = try? await userService.getUser(id: id) {
-                self.currentUser = user
-            }
-            self.isLoading = false
         }
     }
 }

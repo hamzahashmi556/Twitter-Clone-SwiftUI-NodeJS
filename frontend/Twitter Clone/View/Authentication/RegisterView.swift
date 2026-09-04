@@ -9,11 +9,12 @@ import SwiftUI
 
 struct RegisterView: View {
     
-    @StateObject private var vm: RegisterViewModel
+    @State private var name = ""
+    @State private var userName = ""
+    @State private var email = ""
+    @State private var password = ""
     
-    init(authService: AuthServiceProtocol) {
-        self._vm = StateObject(wrappedValue: RegisterViewModel(service: authService))
-    }
+    @ObservedObject var vm: AuthViewModel
     
     var body: some View {
         VStack {
@@ -44,10 +45,10 @@ struct RegisterView: View {
                 .padding(.top, 35)
             
             VStack(alignment: .leading) {
-                CustomAuthTextField(placeHolder: "Username", text: $vm.userName)
-                CustomAuthTextField(placeHolder: "Name", text: $vm.name)
-                CustomAuthTextField(placeHolder: "Phone number or email address", text: $vm.email)
-                CustomAuthTextField(placeHolder: "Password", text: $vm.password)
+                CustomAuthTextField(placeHolder: "Username", text: $userName)
+                CustomAuthTextField(placeHolder: "Name", text: $name)
+                CustomAuthTextField(placeHolder: "Phone number or email address", text: $email)
+                CustomAuthTextField(placeHolder: "Password", text: $password)
             }
             
             Spacer(minLength: 0)
@@ -64,7 +65,7 @@ struct RegisterView: View {
                     Spacer()
                     
                     Button(action: {
-                        vm.register()
+                        vm.register(name: name, userName: userName, email: email, password: password)
                     }, label: {
                         Capsule()
                             .frame(width: 60, height: 30, alignment: .center)
