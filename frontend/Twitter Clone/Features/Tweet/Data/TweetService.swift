@@ -42,4 +42,13 @@ final class TweetService: TweetServiceProtocol {
     func getTweets() async throws -> [Tweet] {
         return try await client.request(baseURL, method: .get, headers: headers, body: nil)
     }
+    
+    func getUserTweets(id: String) async throws -> [Tweet] {
+        return try await client.request(
+            baseURL + "/\(id)",
+            method: .get,
+            headers: headers,
+            body: nil
+        )
+    }
 }
