@@ -32,7 +32,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupTabs() {
-        let feedVC = FeedViewController()
+        let feedVC = FeedViewController(tweetService: tweetService)
         let searchVC = PlaceholderViewController(title: "Search")
         let notificationsVC = PlaceholderViewController(title: "Notifications")
         let messagesVC = PlaceholderViewController(title: "Messages")

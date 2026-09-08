@@ -37,7 +37,7 @@ final class APIClient {
 
         do {
             let (data, response) = try await session.data(for: request)
-
+            
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw APIClientError.invalidResponse
             }

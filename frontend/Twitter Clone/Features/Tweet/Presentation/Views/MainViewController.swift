@@ -27,12 +27,7 @@ final class MainViewController: UIViewController {
         self.slideMenuViewController = SlideMenuViewController(user: user)
         self.homeViewController = HomeViewController(tweetService: container.tweetService)
         super.init(nibName: nil, bundle: nil)
-        authVM.$currentUser
-            .receive(on: RunLoop.main)
-            .sink { [weak self] currentUser in
-                self?.user = currentUser
-            }
-            .store(in: &cancellables)
+        self.bindListeners(authVM: authVM)
     }
     
     required init?(coder: NSCoder) {
@@ -70,6 +65,24 @@ final class MainViewController: UIViewController {
     
     func bindData(user: UserModel?) {
         self.user = user
+    }
+    
+    private func bindListeners(authVM: AuthViewModel) {
+        authVM.$currentUser
+            .receive(on: RunLoop.main)
+            .sink { [weak self] currentUser in
+                self?.user = currentUser
+            }
+            .store(in: &cancellables)
+        
+        AlertManager.shared.$isPresented
+            .combineLatest(AlertManager.shared.$errorMsg)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (isPresented, message) in
+                guard let self, isPresented else { return }
+                self.presentAlert(title: "Alert", message: message)
+            }
+            .store(in: &cancellables)
     }
     
     private func setupChildren() {
@@ -167,6 +180,12 @@ final class MainViewController: UIViewController {
         default:
             break
         }
+    }
+    
+    private func presentAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
     
     private func presentComposeAlert() {

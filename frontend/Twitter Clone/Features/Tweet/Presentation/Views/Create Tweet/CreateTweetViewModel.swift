@@ -26,10 +26,9 @@ final class CreateTweetViewModel: ObservableObject {
         isLoading = true
         Task { @MainActor in
             do {
-                let imageBuffer = image?.base64EncodedString()
-                let request = TweetRequest(text: text, user: user, image: imageBuffer)
-                let response = try await service.createTweet(request: request)
-                success(response.tweet)
+                let request = TweetRequest(text: text, user: user)
+                let response = try await service.createTweet(request: request, imageData: image)
+                success(response)
             }
             catch {
                 AlertManager.shared.showAlert(error: error)

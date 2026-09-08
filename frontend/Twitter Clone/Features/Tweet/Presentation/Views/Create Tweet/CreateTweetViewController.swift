@@ -134,15 +134,6 @@ final class CreateTweetViewController: UIViewController {
                 self?.setLoading(isLoading)
             }
             .store(in: &cancellables)
-        
-        AlertManager.shared.$errorMsg
-            .receive(on: RunLoop.main)
-            .sink { [weak self] message in
-                guard !message.isEmpty else { return }
-                self?.presentAlert(title: "Error", message: message)
-                AlertManager.shared.errorMsg = ""
-            }
-            .store(in: &cancellables)
     }
     
     @objc private func didTapCancel() {
@@ -152,7 +143,7 @@ final class CreateTweetViewController: UIViewController {
     @objc private func didTapTweet() {
         let text = textView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, text != "What's happening?" else {
-            presentAlert(title: "Missing Tweet", message: "Please enter some text before posting.")
+            AlertManager.shared.showAlert(title: "Missing Tweet", message: "Please enter some text before posting.")
             return
         }
         
@@ -179,12 +170,6 @@ final class CreateTweetViewController: UIViewController {
         loadingOverlay.isHidden = !isLoading
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
         view.isUserInteractionEnabled = !isLoading
-    }
-    
-    private func presentAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
 }
 

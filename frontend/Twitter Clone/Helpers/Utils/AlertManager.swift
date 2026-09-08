@@ -13,17 +13,20 @@ final class AlertManager: ObservableObject {
     
     static let shared = AlertManager()
     
+    @Published var title = ""
     @Published var errorMsg = ""
     @Published var isPresented = false
     
     private init() {}
     
-    func showAlert(message: String) {
+    func showAlert(title: String = "Alert", message: String) {
+        self.title = title
         self.errorMsg = message
         isPresented = true
     }
     
-    func showAlert(error: Error) {
+    func showAlert(title: String = "Alert", error: Error) {
+        self.title = title
         self.errorMsg = error.localizedDescription
         isPresented = true
     }
