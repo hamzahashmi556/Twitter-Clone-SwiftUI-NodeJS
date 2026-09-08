@@ -1,0 +1,16 @@
+//
+//  APIClientError.swift
+//  Twitter-Clone-UIKit
+//
+//  Created by PSG-MDU-HAMZA on 07/09/2026.
+//
+
+import Foundation
+
+enum APIClientError: Error {
+    case invalidURL
+    case invalidResponse
+    case requestFailed(Error)
+    case invalidStatusCode(Int, Data)
+    case decodingFailed(Error)
+}

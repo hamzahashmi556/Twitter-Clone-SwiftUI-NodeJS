@@ -1,8 +1,8 @@
 //
 //  AppContainer.swift
-//  Twitter Clone
+//  Twitter-Clone-UIKit
 //
-//  Created by PSG-MDU-HAMZA on 04/09/2026.
+//  Created by PSG-MDU-HAMZA on 07/09/2026.
 //
 
 import Combine

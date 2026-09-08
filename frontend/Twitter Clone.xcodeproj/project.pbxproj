@@ -7,19 +7,32 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		BBC465A9304970CE007FAFAD /* Twitter Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Twitter Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBFA9B94304E8B5A0099094F /* Twitter Clone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Twitter Clone.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BBFA9BA6304E8B5D0099094F /* Exceptions for "Twitter Clone" folder in "Twitter Clone" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BBFA9B93304E8B5A0099094F /* Twitter Clone */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		BBC465AB304970CE007FAFAD /* Twitter Clone */ = {
+		BBFA9B96304E8B5A0099094F /* Twitter Clone */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BBFA9BA6304E8B5D0099094F /* Exceptions for "Twitter Clone" folder in "Twitter Clone" target */,
+			);
 			path = "Twitter Clone";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		BBC465A6304970CE007FAFAD /* Frameworks */ = {
+		BBFA9B91304E8B5A0099094F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -29,18 +42,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BBC465A0304970CD007FAFAD = {
+		BBFA9B8B304E8B5A0099094F = {
 			isa = PBXGroup;
 			children = (
-				BBC465AB304970CE007FAFAD /* Twitter Clone */,
-				BBC465AA304970CE007FAFAD /* Products */,
+				BBFA9B96304E8B5A0099094F /* Twitter Clone */,
+				BBFA9B95304E8B5A0099094F /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		BBC465AA304970CE007FAFAD /* Products */ = {
+		BBFA9B95304E8B5A0099094F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BBC465A9304970CE007FAFAD /* Twitter Clone.app */,
+				BBFA9B94304E8B5A0099094F /* Twitter Clone.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,64 +61,64 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BBC465A8304970CE007FAFAD /* Twitter Clone */ = {
+		BBFA9B93304E8B5A0099094F /* Twitter Clone */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBC465B4304970D1007FAFAD /* Build configuration list for PBXNativeTarget "Twitter Clone" */;
+			buildConfigurationList = BBFA9BA7304E8B5D0099094F /* Build configuration list for PBXNativeTarget "Twitter Clone" */;
 			buildPhases = (
-				BBC465A5304970CE007FAFAD /* Sources */,
-				BBC465A6304970CE007FAFAD /* Frameworks */,
-				BBC465A7304970CE007FAFAD /* Resources */,
+				BBFA9B90304E8B5A0099094F /* Sources */,
+				BBFA9B91304E8B5A0099094F /* Frameworks */,
+				BBFA9B92304E8B5A0099094F /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				BBC465AB304970CE007FAFAD /* Twitter Clone */,
+				BBFA9B96304E8B5A0099094F /* Twitter Clone */,
 			);
 			name = "Twitter Clone";
 			packageProductDependencies = (
 			);
-			productName = "Twitter Clone";
-			productReference = BBC465A9304970CE007FAFAD /* Twitter Clone.app */;
+			productName = "Twitter-Clone-UIKit";
+			productReference = BBFA9B94304E8B5A0099094F /* Twitter Clone.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		BBC465A1304970CE007FAFAD /* Project object */ = {
+		BBFA9B8C304E8B5A0099094F /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
-					BBC465A8304970CE007FAFAD = {
+					BBFA9B93304E8B5A0099094F = {
 						CreatedOnToolsVersion = 26.6;
 					};
 				};
 			};
-			buildConfigurationList = BBC465A4304970CE007FAFAD /* Build configuration list for PBXProject "Twitter Clone" */;
+			buildConfigurationList = BBFA9B8F304E8B5A0099094F /* Build configuration list for PBXProject "Twitter Clone" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
 			);
-			mainGroup = BBC465A0304970CD007FAFAD;
+			mainGroup = BBFA9B8B304E8B5A0099094F;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = BBC465AA304970CE007FAFAD /* Products */;
+			productRefGroup = BBFA9B95304E8B5A0099094F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BBC465A8304970CE007FAFAD /* Twitter Clone */,
+				BBFA9B93304E8B5A0099094F /* Twitter Clone */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		BBC465A7304970CE007FAFAD /* Resources */ = {
+		BBFA9B92304E8B5A0099094F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -115,7 +128,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		BBC465A5304970CE007FAFAD /* Sources */ = {
+		BBFA9B90304E8B5A0099094F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -125,7 +138,71 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		BBC465B2304970D1007FAFAD /* Debug */ = {
+		BBFA9BA8304E8B5D0099094F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WXG7HSGQZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Twitter Clone/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hamzahashmi556.Twitter-Clone-UIKit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		BBFA9BA9304E8B5D0099094F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WXG7HSGQZP;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Twitter Clone/Info.plist";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "hamzahashmi556.Twitter-Clone-UIKit";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		BBFA9BAA304E8B5D0099094F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -189,7 +266,7 @@
 			};
 			name = Debug;
 		};
-		BBC465B3304970D1007FAFAD /* Release */ = {
+		BBFA9BAB304E8B5D0099094F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -246,92 +323,28 @@
 			};
 			name = Release;
 		};
-		BBC465B5304970D1007FAFAD /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WXG7HSGQZP;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "hamzahashmi556.Twitter-Clone";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		BBC465B6304970D1007FAFAD /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = WXG7HSGQZP;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "hamzahashmi556.Twitter-Clone";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BBC465A4304970CE007FAFAD /* Build configuration list for PBXProject "Twitter Clone" */ = {
+		BBFA9B8F304E8B5A0099094F /* Build configuration list for PBXProject "Twitter Clone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BBC465B2304970D1007FAFAD /* Debug */,
-				BBC465B3304970D1007FAFAD /* Release */,
+				BBFA9BAA304E8B5D0099094F /* Debug */,
+				BBFA9BAB304E8B5D0099094F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BBC465B4304970D1007FAFAD /* Build configuration list for PBXNativeTarget "Twitter Clone" */ = {
+		BBFA9BA7304E8B5D0099094F /* Build configuration list for PBXNativeTarget "Twitter Clone" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				BBC465B5304970D1007FAFAD /* Debug */,
-				BBC465B6304970D1007FAFAD /* Release */,
+				BBFA9BA8304E8B5D0099094F /* Debug */,
+				BBFA9BA9304E8B5D0099094F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = BBC465A1304970CE007FAFAD /* Project object */;
+	rootObject = BBFA9B8C304E8B5A0099094F /* Project object */;
 }
