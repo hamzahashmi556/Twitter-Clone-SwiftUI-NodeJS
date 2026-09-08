@@ -12,7 +12,9 @@ final class HomeViewController: UIViewController {
     private let contentTabBarController = UITabBarController()
     private let composeButton = UIButton(type: .system)
     private let tweetService: TweetServiceProtocol
+    private let dimmingView = UIView()
     
+    var onDimmerTapped: (() -> Void)?
     var onComposeTapped: (() -> Void)?
     
     init(tweetService: TweetServiceProtocol) {
@@ -29,6 +31,7 @@ final class HomeViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupTabs()
         setupComposeButton()
+        setupDimmingView()
     }
     
     private func setupTabs() {
@@ -50,13 +53,35 @@ final class HomeViewController: UIViewController {
         addChild(contentTabBarController)
         view.addSubview(contentTabBarController.view)
         contentTabBarController.didMove(toParent: self)
-        
+                
         NSLayoutConstraint.activate([
             contentTabBarController.view.topAnchor.constraint(equalTo: view.topAnchor),
             contentTabBarController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             contentTabBarController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             contentTabBarController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+    
+    private func setupDimmingView() {
+        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        dimmingView.alpha = 0
+        dimmingView.isUserInteractionEnabled = true
+        dimmingView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(dimmingView)
+        
+        NSLayoutConstraint.activate([
+            dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dimmerAction))
+        dimmingView.addGestureRecognizer(tap)
+    }
+    
+    @objc func dimmerAction() {
+        self.onDimmerTapped?()
     }
     
     private func setupComposeButton() {
@@ -79,6 +104,33 @@ final class HomeViewController: UIViewController {
             composeButton.widthAnchor.constraint(equalToConstant: 56),
             composeButton.heightAnchor.constraint(equalToConstant: 56)
         ])
+    }
+    
+    func updateTransormation(targetX: CGFloat, menuWidth: CGFloat) {
+        view.transform = CGAffineTransform(translationX: targetX, y: 0)
+//        dimmingView.transform = CGAffineTransform(translationX: targetX, y: 0)
+        dimmingView.alpha = targetX / menuWidth
+
+    }
+    
+    func closeMenuAction() {
+        UIView.animate(withDuration: 0.25) {
+//            self.dimmingView.transform = .identity
+            self.view.transform = .identity
+            self.dimmingView.alpha = 0
+        }
+    }
+    
+    func openMenuAction(menuWidth: CGFloat) {
+        UIView.animate(withDuration: 0.25) {
+//            self.dimmingView.transform = CGAffineTransform(translationX: menuWidth, y: 0)
+            self.view.transform = CGAffineTransform(translationX: menuWidth, y: 0)
+            self.dimmingView.alpha = 1
+        }
+    }
+    
+    func updateOpacity(alpha: CGFloat) {
+        self.dimmingView.alpha = alpha
     }
     
     @objc private func didTapCompose() {

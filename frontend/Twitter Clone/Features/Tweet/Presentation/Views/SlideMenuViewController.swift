@@ -9,12 +9,15 @@ import UIKit
 import Combine
 
 final class SlideMenuViewController: UIViewController {
+    var onProfileTapped: (() -> Void)?
+    
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logo"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 30
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
 
@@ -68,7 +71,8 @@ final class SlideMenuViewController: UIViewController {
     private var user: UserModel?
     private var cancellables = Set<AnyCancellable>()
 
-    init(authVM: AuthViewModel) {
+    init(authVM: AuthViewModel, onProfileTapped: (() -> Void)? = nil) {
+        self.onProfileTapped = onProfileTapped
         super.init(nibName: nil, bundle: nil)
         authVM.$currentUser
             .receive(on: RunLoop.main)
@@ -93,6 +97,13 @@ final class SlideMenuViewController: UIViewController {
         view.backgroundColor = .systemBackground
         setupUI()
         updateUI(with: user)
+        let tg = UITapGestureRecognizer(target: self, action: #selector(pushProfile))
+        tg.numberOfTapsRequired = 1
+        self.avatarImageView.addGestureRecognizer(tg)
+    }
+    
+    @objc func pushProfile() {
+        onProfileTapped?()
     }
 
     private func setupUI() {

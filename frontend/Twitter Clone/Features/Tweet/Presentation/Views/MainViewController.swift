@@ -15,7 +15,7 @@ final class MainViewController: UIViewController {
     
     private let slideMenuViewController: SlideMenuViewController
     private let homeViewController: HomeViewController
-    private let dimmingView = UIView()
+    
     private var slideMenuWidthConstraint: NSLayoutConstraint?
     private var isMenuOpen = false
     
@@ -24,9 +24,17 @@ final class MainViewController: UIViewController {
     init(user: UserModel?, container: AppContainer, authVM: AuthViewModel) {
         self.user = user
         self.container = container
-        self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         self.homeViewController = HomeViewController(tweetService: container.tweetService)
+        self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         super.init(nibName: nil, bundle: nil)
+        self.slideMenuViewController.onProfileTapped = { [weak self] in
+            guard let self, let user = authVM.currentUser else { return }
+            let profileVC = ProfileViewController(
+                user: user,
+                tweetService: container.tweetService
+            )
+            self.navigationController?.pushViewController(profileVC, animated: true)
+        }
         self.bindListeners(authVM: authVM)
     }
     
@@ -45,8 +53,11 @@ final class MainViewController: UIViewController {
             action: #selector(didTapMenu)
         )
         setupChildren()
-        setupDimmingView()
+        
         setupGestures()
+        homeViewController.onDimmerTapped = { [weak self] in
+            self?.closeMenu()
+        }
         homeViewController.onComposeTapped = { [weak self] in
             guard let self, let user else { return }
             let createSheet = CreateTweetViewController(
@@ -111,24 +122,6 @@ final class MainViewController: UIViewController {
         ])
     }
     
-    private func setupDimmingView() {
-        dimmingView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        dimmingView.alpha = 0
-        dimmingView.isUserInteractionEnabled = true
-        dimmingView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(dimmingView)
-        
-        NSLayoutConstraint.activate([
-            dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
-            dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapDimmer))
-        dimmingView.addGestureRecognizer(tap)
-    }
-    
     private func setupGestures() {
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePanGesture(_:)))
         view.addGestureRecognizer(panGesture)
@@ -145,21 +138,12 @@ final class MainViewController: UIViewController {
     private func openMenu() {
         isMenuOpen = true
         let menuWidth = slideMenuWidthConstraint?.constant ?? 280
-        
-        UIView.animate(withDuration: 0.25) {
-            self.dimmingView.transform = CGAffineTransform(translationX: menuWidth, y: 0)
-            self.homeViewController.view.transform = CGAffineTransform(translationX: menuWidth, y: 0)
-            self.dimmingView.alpha = 1
-        }
+        homeViewController.openMenuAction(menuWidth: menuWidth)
     }
     
     private func closeMenu() {
         isMenuOpen = false
-        UIView.animate(withDuration: 0.25) {
-            self.dimmingView.transform = .identity
-            self.homeViewController.view.transform = .identity
-            self.dimmingView.alpha = 0
-        }
+        homeViewController.closeMenuAction()
     }
     
     @objc private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
@@ -174,9 +158,7 @@ final class MainViewController: UIViewController {
             } else {
                 targetX = max(0, min(menuWidth, translation))
             }
-            homeViewController.view.transform = CGAffineTransform(translationX: targetX, y: 0)
-            dimmingView.transform = CGAffineTransform(translationX: targetX, y: 0)
-            dimmingView.alpha = targetX / menuWidth
+            homeViewController.updateTransormation(targetX: targetX, menuWidth: menuWidth)
         case .ended, .cancelled:
             let shouldOpen = homeViewController.view.transform.tx > menuWidth / 2
             shouldOpen ? openMenu() : closeMenu()
