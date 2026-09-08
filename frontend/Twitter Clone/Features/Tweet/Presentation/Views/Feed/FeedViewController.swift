@@ -23,8 +23,8 @@ final class FeedViewController: UIViewController {
         return tableView
     }()
     
-    init(viewModel: FeedViewModel = FeedViewModel()) {
-        self.viewModel = viewModel
+    init(tweetService: TweetServiceProtocol) {
+        self.viewModel = FeedViewModel(tweetService: tweetService)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -54,7 +54,7 @@ final class FeedViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.$posts
+        viewModel.$tweets
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
@@ -65,14 +65,14 @@ final class FeedViewController: UIViewController {
 
 extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.posts.count
+        viewModel.tweets.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetTableViewCell.reuseIdentifier, for: indexPath) as? TweetTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(with: viewModel.posts[indexPath.row])
+        cell.configure(with: viewModel.tweets[indexPath.row])
         return cell
     }
 }

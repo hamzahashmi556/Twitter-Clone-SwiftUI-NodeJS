@@ -9,4 +9,5 @@ import Foundation
 
 protocol TweetServiceProtocol {
     func createTweet(request: TweetRequest, imageData: Data?) async throws -> Tweet
+    func getTweets() async throws -> [Tweet]
 }

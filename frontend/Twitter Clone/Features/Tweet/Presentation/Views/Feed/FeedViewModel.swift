@@ -10,10 +10,25 @@ import Combine
 
 final class FeedViewModel: ObservableObject {
     
-    @Published private(set) var posts: [Tweet]
+    @Published private(set) var tweets: [Tweet] = []
     
-    init() {
-        self.posts = Self.makeSamplePosts()
+    let tweetService: TweetServiceProtocol
+    
+    init(tweetService: TweetServiceProtocol) {
+        self.tweetService = tweetService
+        self.fetchTweets()
+    }
+    
+    func fetchTweets() {
+        Task {
+            do {
+                let tweets = try await tweetService.getTweets()
+                self.tweets = tweets
+            }
+            catch {
+                AlertManager.shared.showAlert(error: error)
+            }
+        }
     }
     
     private static func makeSamplePosts() -> [Tweet] {

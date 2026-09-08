@@ -38,5 +38,8 @@ final class TweetService: TweetServiceProtocol {
         )
         return imageResponse.tweet
     }
+    
+    func getTweets() async throws -> [Tweet] {
+        return try await client.request(baseURL, method: .get, headers: headers, body: nil)
     }
 }
