@@ -24,7 +24,7 @@ router.post('/tweets', auth, async (req, res) => {
     const tweet = new Tweet(tweetJson)
     try {
         await tweet.save()
-        return res.status(200).send({ tweet: tweet })
+        return res.status(200).send( tweet )
     }
     catch (error) {
         res.status(400).json(error)
