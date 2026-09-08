@@ -72,7 +72,7 @@ router.post('/tweet/uploadImage/:id', auth, uploader.single('image'), async (req
 })
 
 // Get Tweet Image
-router.get('/tweet/image/:id', auth, async (req, res) => {
+router.get('/tweet/image/:id', async (req, res) => {
     try {
         const id = req.params.id
         const tweet = await Tweet.findById(id)
