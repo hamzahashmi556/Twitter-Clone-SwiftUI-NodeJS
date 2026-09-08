@@ -65,8 +65,6 @@ final class TweetTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.textColor = .red
         label.textAlignment = .center
-        label.backgroundColor = UIColor.black.withAlphaComponent(0.45)
-        label.layer.cornerRadius = 10
         label.clipsToBounds = true
         label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -24,7 +24,7 @@ final class MainViewController: UIViewController {
     init(user: UserModel?, container: AppContainer, authVM: AuthViewModel) {
         self.user = user
         self.container = container
-        self.slideMenuViewController = SlideMenuViewController(user: user)
+        self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         self.homeViewController = HomeViewController(tweetService: container.tweetService)
         super.init(nibName: nil, bundle: nil)
         self.bindListeners(authVM: authVM)
@@ -147,6 +147,7 @@ final class MainViewController: UIViewController {
         let menuWidth = slideMenuWidthConstraint?.constant ?? 280
         
         UIView.animate(withDuration: 0.25) {
+            self.dimmingView.transform = CGAffineTransform(translationX: menuWidth, y: 0)
             self.homeViewController.view.transform = CGAffineTransform(translationX: menuWidth, y: 0)
             self.dimmingView.alpha = 1
         }
@@ -155,6 +156,7 @@ final class MainViewController: UIViewController {
     private func closeMenu() {
         isMenuOpen = false
         UIView.animate(withDuration: 0.25) {
+            self.dimmingView.transform = .identity
             self.homeViewController.view.transform = .identity
             self.dimmingView.alpha = 0
         }
@@ -173,6 +175,7 @@ final class MainViewController: UIViewController {
                 targetX = max(0, min(menuWidth, translation))
             }
             homeViewController.view.transform = CGAffineTransform(translationX: targetX, y: 0)
+            dimmingView.transform = CGAffineTransform(translationX: targetX, y: 0)
             dimmingView.alpha = targetX / menuWidth
         case .ended, .cancelled:
             let shouldOpen = homeViewController.view.transform.tx > menuWidth / 2

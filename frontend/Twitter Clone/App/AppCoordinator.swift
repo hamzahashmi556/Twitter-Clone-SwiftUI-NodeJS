@@ -36,7 +36,9 @@ final class AppCoordinator {
             }
             .store(in: &cancellables)
         
-        if UserDefaults.jwt != nil {
+        if let jwt = UserDefaults.jwt {
+            print("token: \(jwt)")
+            print("userid: \(UserDefaults.userID ?? "null")")
             showMainFlow(user: authVM.currentUser)
         } else {
             showAuthFlow()
