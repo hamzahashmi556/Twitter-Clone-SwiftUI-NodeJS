@@ -13,7 +13,7 @@ class ProfileViewModel {
     @Published private(set) var isLoading = false
     @Published private(set) var tweets: [Tweet] = []
     
-    let user: UserModel
+    var user: UserModel
     let tweetService: TweetServiceProtocol
     
     init(user: UserModel, tweetService: TweetServiceProtocol) {

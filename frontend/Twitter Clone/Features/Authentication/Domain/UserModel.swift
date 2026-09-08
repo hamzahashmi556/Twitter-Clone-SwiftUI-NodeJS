@@ -35,6 +35,19 @@ struct UserRequest: Encodable {
     var location: String?
 }
 
+struct UserUpdateRequest: Encodable {
+    var name: String?
+    var email: String?
+    var password: String?
+    var bio: String?
+    var website: String?
+    var location: String?
+}
+
+struct UserImageResponse: Decodable {
+    var message: String
+}
+
 struct LoginRequest: Encodable {
     var email: String
     var password: String

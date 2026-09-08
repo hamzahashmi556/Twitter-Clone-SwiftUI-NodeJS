@@ -10,4 +10,5 @@ enum APIMethods: String {
     case get = "GET"
     case put = "PUT"
     case post = "POST"
+    case patch = "PATCH"
 }

@@ -167,6 +167,13 @@ final class SlideMenuViewController: UIViewController {
         handleLabel.text = "@\(user?.userName ?? "cem_salta")"
         followingValueLabel.text = "\(user?.followings.count ?? 0)"
         followersValueLabel.text = "\(user?.followers.count ?? 0)"
+        
+        if let base64 = user?.avatar,
+           let data = Data(base64Encoded: base64),
+           let image = UIImage(data: data)
+        {
+            self.avatarImageView.image = image
+        }
     }
 
     private func makeCountStack() -> UIStackView {

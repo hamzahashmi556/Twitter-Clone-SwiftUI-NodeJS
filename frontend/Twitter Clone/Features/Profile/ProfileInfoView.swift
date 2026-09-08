@@ -12,6 +12,7 @@ final class ProfileInfoView: UICollectionReusableView {
     static let reuseIdentifier = "ProfileInfoView"
 
     let profileImageContainer = UIView()
+    var onEditPressed: (() -> Void)?
 
     private let profileImageView: UIImageView = {
         let imageView = UIImageView(
@@ -131,6 +132,8 @@ final class ProfileInfoView: UICollectionReusableView {
         usernameLabel.translatesAutoresizingMaskIntoConstraints = false
         bioLabel.translatesAutoresizingMaskIntoConstraints = false
         statsLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        editButton.addTarget(self, action: #selector(openEditProfile), for: .touchUpInside)
 
         NSLayoutConstraint.activate([
 
@@ -237,6 +240,10 @@ final class ProfileInfoView: UICollectionReusableView {
                 constant: -15
             )
         ])
+    }
+    
+    @objc func openEditProfile() {
+        onEditPressed?()
     }
 
     private static func makeStatsText(

@@ -31,7 +31,7 @@ final class MainViewController: UIViewController {
             guard let self, let user = authVM.currentUser else { return }
             let profileVC = ProfileViewController(
                 user: user,
-                tweetService: container.tweetService
+                container: container
             )
             self.navigationController?.pushViewController(profileVC, animated: true)
         }

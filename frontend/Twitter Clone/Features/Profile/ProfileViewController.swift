@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import SwiftUI
 
 final class ProfileViewController: UIViewController {
     
@@ -66,9 +67,12 @@ final class ProfileViewController: UIViewController {
 
     private var selectedTab = 0
     private var isHeaderConfigured = false
+    
+    private let container: AppContainer
 
-    init(user: UserModel, tweetService: TweetServiceProtocol) {
-        self.vm = ProfileViewModel(user: user, tweetService: tweetService)
+    init(user: UserModel, container: AppContainer) {
+        self.container = container
+        self.vm = ProfileViewModel(user: user, tweetService: container.tweetService)
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -87,6 +91,19 @@ final class ProfileViewController: UIViewController {
         bindViewModel()
         refreshHeaderContent()
         updateHeaderSize()
+        
+        profileInfoView.onEditPressed = { [weak self] in
+            guard let self else { return }
+            let view = EditProfileViewController(
+                user: vm.user,
+                userUpdated: { updatedUser in
+                    self.vm.user = updatedUser
+                },
+                userService: container.userService,
+                presentingViewController: self
+            )
+            self.navigationController?.pushViewController(view, animated: true)
+        }
     }
 
     override func viewDidLayoutSubviews() {
