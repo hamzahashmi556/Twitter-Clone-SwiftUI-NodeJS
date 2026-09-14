@@ -10,6 +10,7 @@ import UIKit
 import Combine
 
 final class FeedViewController: UIViewController {
+    
     private let viewModel: FeedViewModel
     private var cancellables = Set<AnyCancellable>()
     
@@ -23,8 +24,8 @@ final class FeedViewController: UIViewController {
         return tableView
     }()
     
-    init(tweetService: TweetServiceProtocol) {
-        self.viewModel = FeedViewModel(tweetService: tweetService)
+    init(tweetService: TweetServiceProtocol, userService: UserServiceProtocol) {
+        self.viewModel = FeedViewModel(tweetService: tweetService, userService: userService)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -42,7 +43,7 @@ final class FeedViewController: UIViewController {
     private func setupTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(TweetTableViewCell.self, forCellReuseIdentifier: TweetTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: "TweetCell", bundle: nil), forCellReuseIdentifier: TweetCell.reuseIdentifier)
         
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
@@ -55,7 +56,8 @@ final class FeedViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.$tweets
-            .receive(on: RunLoop.main)
+            .combineLatest(viewModel.$otherUsers)
+            .debounce(for: .seconds(1), scheduler: RunLoop.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
             }
@@ -69,10 +71,16 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetTableViewCell.reuseIdentifier, for: indexPath) as? TweetTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TweetCell.reuseIdentifier, for: indexPath) as? TweetCell else {
             return UITableViewCell()
         }
-        cell.configure(with: viewModel.tweets[indexPath.row])
+        let tweet = viewModel.tweets[indexPath.row]
+        let user = viewModel.otherUsers.first(where: { $0.id == tweet.userId })
+        cell.configure(with: tweet, user: user)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 250
     }
 }

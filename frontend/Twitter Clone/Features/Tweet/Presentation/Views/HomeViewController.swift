@@ -11,14 +11,14 @@ import UIKit
 final class HomeViewController: UIViewController {
     private let contentTabBarController = UITabBarController()
     private let composeButton = UIButton(type: .system)
-    private let tweetService: TweetServiceProtocol
+    private let container: AppContainer
     private let dimmingView = UIView()
     
     var onDimmerTapped: (() -> Void)?
     var onComposeTapped: (() -> Void)?
     
-    init(tweetService: TweetServiceProtocol) {
-        self.tweetService = tweetService
+    init(container: AppContainer) {
+        self.container = container
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,7 +35,10 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupTabs() {
-        let feedVC = FeedViewController(tweetService: tweetService)
+        let feedVC = FeedViewController(
+            tweetService: container.tweetService,
+            userService: container.userService
+        )
         let searchVC = PlaceholderViewController(title: "Search")
         let notificationsVC = PlaceholderViewController(title: "Notifications")
         let messagesVC = PlaceholderViewController(title: "Messages")

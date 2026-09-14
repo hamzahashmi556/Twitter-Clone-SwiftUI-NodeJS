@@ -24,7 +24,7 @@ final class MainViewController: UIViewController {
     init(user: UserModel?, container: AppContainer, authVM: AuthViewModel) {
         self.user = user
         self.container = container
-        self.homeViewController = HomeViewController(tweetService: container.tweetService)
+        self.homeViewController = HomeViewController(container: container)
         self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         super.init(nibName: nil, bundle: nil)
         self.slideMenuViewController.onProfileTapped = { [weak self] in
