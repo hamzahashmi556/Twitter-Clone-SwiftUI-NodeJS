@@ -20,7 +20,7 @@ router.post('/notifications', auth, async (req, res) => {
     }
 })
 
-router.get('/notification/:id', async (req, res) => {
+router.get('/notifications/:id', async (req, res) => {
     try {
         const id = req.params.id
         const notifications = await Notification.find({ receiverId: id })
