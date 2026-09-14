@@ -116,7 +116,7 @@ router.get('/tweets/:id', auth, async (req, res) => {
 })
 
 // Like Tweet
-router.post('/tweets/:id/like', auth, async (req, res) => {
+router.post('/tweets/like/:id', auth, async (req, res) => {
     const userId = req.user.id
     const tweetId = req.params.id
     try {
@@ -128,7 +128,8 @@ router.post('/tweets/:id/like', auth, async (req, res) => {
             return res.status(400).send('You already liked this tweet')
         }
         await tweet.updateOne({ $push: { likes: userId } })
-        return res.status(200).send('Tweet has been liked')
+        const response = await Tweet.findById(tweetId)
+        return res.status(200).send(response)
     }
     catch (error) {
         res.status(500).json(error.message)
@@ -137,7 +138,7 @@ router.post('/tweets/:id/like', auth, async (req, res) => {
 })
 
 // Unlike Tweet
-router.post('/tweets/:id/unlike', auth, async (req, res) => {
+router.post('/tweets/unlike/:id', auth, async (req, res) => {
     const userId = req.user.id
     const tweetId = req.params.id
     try {
@@ -149,7 +150,8 @@ router.post('/tweets/:id/unlike', auth, async (req, res) => {
             return res.status(400).send('You already unliked this tweet')
         }
         await tweet.updateOne({ $pull: { likes: userId } })
-        return res.status(200).send('Tweet has been unliked')
+        const response = await Tweet.findById(tweetId)
+        return res.status(200).send(response)
     }
     catch (error) {
         res.status(500).json(error.message)
