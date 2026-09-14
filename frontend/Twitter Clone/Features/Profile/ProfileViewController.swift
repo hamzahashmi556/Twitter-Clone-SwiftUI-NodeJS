@@ -15,7 +15,7 @@ final class ProfileViewController: UIViewController {
     private var cancellables = Set<AnyCancellable>()
 
     private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.separatorStyle = .none
         tableView.backgroundColor = .systemBackground
         tableView.rowHeight = UITableView.automaticDimension
@@ -39,23 +39,15 @@ final class ProfileViewController: UIViewController {
         return indicator
     }()
 
-    private let headerContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemBackground
-        return view
-    }()
-
     private let headerStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
         stack.alignment = .fill
         stack.spacing = 0
-        stack.translatesAutoresizingMaskIntoConstraints = false
         return stack
     }()
-
-    private let headerView = UserProfileHeaderView()
-    private let profileInfoView = ProfileInfoView()
+    
+    private let headerView = ProfileTableHeader()
     private let tabBarView = ProfileTabBarView()
 
     private let tabs = [
@@ -90,9 +82,9 @@ final class ProfileViewController: UIViewController {
         setupLoadingOverlay()
         bindViewModel()
         refreshHeaderContent()
-        updateHeaderSize()
         
-        profileInfoView.onEditPressed = { [weak self] in
+        
+        headerView.editPressed = { [weak self] in
             guard let self else { return }
             let view = EditProfileViewController(
                 user: vm.user,
@@ -104,11 +96,6 @@ final class ProfileViewController: UIViewController {
             )
             self.navigationController?.pushViewController(view, animated: true)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        updateHeaderSize()
     }
 
     private func setupTableView() {
@@ -129,26 +116,22 @@ final class ProfileViewController: UIViewController {
     }
 
     private func setupHeader() {
-        headerView.translatesAutoresizingMaskIntoConstraints = false
-        profileInfoView.translatesAutoresizingMaskIntoConstraints = false
-        tabBarView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let tableWidth = tableView.frame.width
 
         tabBarView.delegate = self
-
+        
+        headerView.bounds = CGRect(
+            origin: .zero,
+            size: CGSize(width: tableWidth, height: 450)
+        )
+        tabBarView.bounds = CGRect(
+            origin: .zero,
+            size: CGSize(width: tableWidth, height: 45)
+        )
         headerStackView.addArrangedSubview(headerView)
-        headerStackView.addArrangedSubview(profileInfoView)
         headerStackView.addArrangedSubview(tabBarView)
-
-        headerContainerView.addSubview(headerStackView)
-
-        NSLayoutConstraint.activate([
-            headerStackView.topAnchor.constraint(equalTo: headerContainerView.topAnchor),
-            headerStackView.leadingAnchor.constraint(equalTo: headerContainerView.leadingAnchor),
-            headerStackView.trailingAnchor.constraint(equalTo: headerContainerView.trailingAnchor),
-            headerStackView.bottomAnchor.constraint(equalTo: headerContainerView.bottomAnchor)
-        ])
-
-        tableView.tableHeaderView = headerContainerView
+        
         isHeaderConfigured = true
     }
 
@@ -174,7 +157,6 @@ final class ProfileViewController: UIViewController {
                 guard let self else { return }
                 self.tableView.reloadData()
                 self.refreshHeaderContent()
-                self.updateHeaderSize()
             }
             .store(in: &cancellables)
 
@@ -191,38 +173,10 @@ final class ProfileViewController: UIViewController {
     private func refreshHeaderContent() {
         guard isHeaderConfigured else { return }
 
-        headerView.configure(user: vm.user, tweetCount: vm.tweets.count)
-        profileInfoView.configure(user: vm.user)
+        headerView.bindData(user: vm.user, tweetCount: vm.tweets.count)
         tabBarView.configure(selectedIndex: selectedTab)
     }
-
-    private func updateHeaderSize() {
-        guard tableView.bounds.width > 0 else { return }
-
-        let targetSize = CGSize(
-            width: tableView.bounds.width,
-            height: UIView.layoutFittingCompressedSize.height
-        )
-
-        let size = headerContainerView.systemLayoutSizeFitting(
-            targetSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
-
-        let updatedFrame = CGRect(
-            x: 0,
-            y: 0,
-            width: tableView.bounds.width,
-            height: size.height
-        )
-
-        if headerContainerView.frame != updatedFrame {
-            headerContainerView.frame = updatedFrame
-            tableView.tableHeaderView = headerContainerView
-        }
-    }
-
+    
     private func setLoading(_ isLoading: Bool) {
         loadingOverlay.isHidden = !isLoading
         isLoading ? activityIndicator.startAnimating() : activityIndicator.stopAnimating()
@@ -231,6 +185,7 @@ final class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         vm.tweets.count
     }
@@ -245,6 +200,18 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
         cell.configure(with: vm.tweets[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 355
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return headerStackView
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
+        return 355
     }
 }
 
