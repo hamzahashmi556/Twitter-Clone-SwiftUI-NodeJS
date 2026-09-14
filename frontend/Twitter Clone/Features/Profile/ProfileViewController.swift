@@ -102,8 +102,8 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(
-            TweetTableViewCell.self,
-            forCellReuseIdentifier: TweetTableViewCell.reuseIdentifier
+            TweetCell.self,
+            forCellReuseIdentifier: TweetCell.reuseIdentifier
         )
 
         view.addSubview(tableView)
@@ -192,13 +192,14 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: TweetTableViewCell.reuseIdentifier,
+            withIdentifier: TweetCell.reuseIdentifier,
             for: indexPath
-        ) as? TweetTableViewCell else {
+        ) as? TweetCell else {
             return UITableViewCell()
         }
-
-        cell.configure(with: vm.tweets[indexPath.row])
+        
+        let tweet = vm.tweets[indexPath.row]
+        cell.configure(with: tweet, user: vm.user)
         return cell
     }
     

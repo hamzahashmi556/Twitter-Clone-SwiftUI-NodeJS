@@ -47,14 +47,7 @@ class ProfileTableHeader: UICollectionReusableView {
         contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         addSubview(contentView)
         
-        // border color
-        profileImgView.layer.borderColor = UIColor.white.cgColor
-        profileImgView.layer.borderWidth = 3
-        
-        // circle shape
-        profileImgView.layer.cornerRadius = profileImgView.bounds.width / 2
-        profileImgView.clipsToBounds = true
-        profileImgView.contentMode = .scaleAspectFill
+        profileImgView.applyCircularWithBorder()
         
         // shadow image container
         profileImgContainer.backgroundColor = nil
