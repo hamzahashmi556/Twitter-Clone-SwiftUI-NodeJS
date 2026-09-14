@@ -12,10 +12,12 @@ final class AppContainer: ObservableObject {
     let authService: AuthServiceProtocol
     let userService: UserServiceProtocol
     let tweetService: TweetServiceProtocol
+    let notificationService: NotificationServiceProtocol
     
     init() {
         self.authService = AuthService()
         self.userService = UserService()
         self.tweetService = TweetService()
+        self.notificationService = NotificationService()
     }
 }

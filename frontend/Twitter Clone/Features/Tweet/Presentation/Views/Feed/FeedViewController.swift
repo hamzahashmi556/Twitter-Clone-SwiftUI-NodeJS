@@ -13,6 +13,7 @@ final class FeedViewController: UIViewController {
     
     private let authVM: AuthViewModel
     private let viewModel: FeedViewModel
+    private let notificationVM: NotificationViewModel
     private let container: AppContainer
     private var cancellables = Set<AnyCancellable>()
     
@@ -26,9 +27,10 @@ final class FeedViewController: UIViewController {
         return tableView
     }()
     
-    init(container: AppContainer, authVM: AuthViewModel) {
+    init(container: AppContainer, authVM: AuthViewModel, notificationVM: NotificationViewModel) {
         self.container = container
         self.authVM = authVM
+        self.notificationVM = notificationVM
         self.viewModel = FeedViewModel(
             tweetService: container.tweetService,
             userService: container.userService
@@ -87,12 +89,19 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         
         cell.likePressed = { [weak self] in
             guard let self = self else { return }
+            guard let user = authVM.currentUser else { return }
             Task {
-                if tweet.likes.contains(UserDefaults.userID ?? "") {
-                    await self.viewModel.unlike(tweetId: tweet.id)
+                do {
+                    if tweet.likes.contains(user.id) {
+                        try await self.viewModel.unlike(tweetId: tweet.id)
+                    }
+                    else {
+                        try await self.viewModel.like(tweetId: tweet.id)
+                        try await self.notificationVM.createNotification(text: nil, user: user, otherUserID: tweet.userId, type: .like)
+                    }
                 }
-                else {
-                    await self.viewModel.like(tweetId: tweet.id)
+                catch {
+                    AlertManager.shared.showAlert(title: "Error", error: error)
                 }
                 await MainActor.run {
                     self.tableView.reloadRows(at: [indexPath], with: .automatic)

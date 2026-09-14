@@ -13,6 +13,7 @@ final class HomeViewController: UIViewController {
     private let composeButton = UIButton(type: .system)
     private let container: AppContainer
     private let authVM: AuthViewModel
+    private let notificationVM: NotificationViewModel
     private let dimmingView = UIView()
     
     var onDimmerTapped: (() -> Void)?
@@ -21,6 +22,7 @@ final class HomeViewController: UIViewController {
     init(container: AppContainer, authVM: AuthViewModel) {
         self.container = container
         self.authVM = authVM
+        self.notificationVM = NotificationViewModel(notificationService: container.notificationService)
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -37,9 +39,9 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupTabs() {
-        let feedVC = FeedViewController(container: container, authVM: authVM)
+        let feedVC = FeedViewController(container: container, authVM: authVM, notificationVM: notificationVM)
         let searchVC = SearchViewController(container: container, authVM: authVM)
-        let notificationsVC = PlaceholderViewController(title: "Notifications")
+        let notificationsVC = NotificationViewController(notificationVM: notificationVM, authVM: authVM)
         let messagesVC = PlaceholderViewController(title: "Messages")
         
         feedVC.tabBarItem = UITabBarItem(title: nil, image: UIImage(named: "Home") ?? UIImage(systemName: "house"), selectedImage: UIImage(named: "Home"))

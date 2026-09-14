@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import SwiftUI
 
 final class ProfileViewController: UIViewController {
     
@@ -68,7 +67,8 @@ final class ProfileViewController: UIViewController {
             user: user,
             otherUser: otherUser,
             tweetService: container.tweetService,
-            userService: container.userService
+            userService: container.userService,
+            notificationService: container.notificationService
         )
         super.init(nibName: nil, bundle: nil)
     }
@@ -228,6 +228,11 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
         
         let tweet = vm.tweets[indexPath.row]
         cell.configure(with: tweet, user: vm.user)
+        
+//        cell.likePressed = { [weak self] in
+//            
+//        }
+        
         return cell
     }
     

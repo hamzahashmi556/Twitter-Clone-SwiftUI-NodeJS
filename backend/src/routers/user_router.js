@@ -176,7 +176,7 @@ router.put('/users/follow/:id', auth, async (req, res) => {
             res.status(500).json(error.message)
         }
     } else {
-        res.status(403).send('Cannot unfollow your own user')
+        res.status(403).send('Cannot follow your own user')
     }
 })
 

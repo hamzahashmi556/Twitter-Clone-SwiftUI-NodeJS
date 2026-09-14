@@ -53,27 +53,17 @@ final class FeedViewModel: ObservableObject {
         }
     }
     
-    func like(tweetId: String) async {
-        do {
-            let response = try await tweetService.like(tweetId: tweetId)
-            if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
-                self.tweets[index] = response
-            }
-        }
-        catch {
-            AlertManager.shared.showAlert(title: "Error", error: error)
+    func like(tweetId: String) async throws {
+        let response = try await tweetService.like(tweetId: tweetId)
+        if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
+            self.tweets[index] = response
         }
     }
     
-    func unlike(tweetId: String) async {
-        do {
-            let response = try await tweetService.unlike(tweetId: tweetId)
-            if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
-                self.tweets[index] = response
-            }
-        }
-        catch {
-            AlertManager.shared.showAlert(title: "Error", error: error)
+    func unlike(tweetId: String) async throws {
+        let response = try await tweetService.unlike(tweetId: tweetId)
+        if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
+            self.tweets[index] = response
         }
     }
 }

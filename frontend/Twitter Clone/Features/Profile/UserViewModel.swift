@@ -17,12 +17,14 @@ class ProfileViewModel {
     var otherUser: UserModel? // for viewing other profile
     let tweetService: TweetServiceProtocol
     let userService: UserServiceProtocol
+    let notificationService: NotificationServiceProtocol
     
-    init(user: UserModel, otherUser: UserModel?, tweetService: TweetServiceProtocol, userService: UserServiceProtocol) {
+    init(user: UserModel, otherUser: UserModel?, tweetService: TweetServiceProtocol, userService: UserServiceProtocol, notificationService: NotificationServiceProtocol) {
         self.user = user
         self.otherUser = otherUser
         self.tweetService = tweetService
         self.userService = userService
+        self.notificationService = notificationService
         self.getTweets()
     }
     
@@ -45,17 +47,23 @@ class ProfileViewModel {
     }
     
     func follow() async {
+        guard let otherUser else { return }
         do {
-            let otherUser = try await userService.follow(userID: user.id)
-            self.otherUser = otherUser
+            let response = try await userService.follow(userID: otherUser.id)
+            self.otherUser = response
+            AlertManager.shared.showAlert(message: "You followed " + response.name)
             
-            let notification = NotificationRequest(
-                userName: user.userName,
-                senderId: user.id,
-                receiverId: otherUser.id,
-                notificationType: .follow
-            )
-            AlertManager.shared.showAlert(message: "You followed " + user.name)
+            // send notification
+            do {
+                let notification = NotificationRequest(
+                    userName: user.userName,
+                    senderId: user.id,
+                    receiverId: otherUser.id,
+                    notificationType: .follow
+                )
+                let response = try await notificationService.post(request: notification)
+                print("Notification Sent: \(response)")
+            } catch { }
         }
         catch {
             AlertManager.shared.showAlert(title: "Follow Failed", error: error)
@@ -63,10 +71,11 @@ class ProfileViewModel {
     }
     
     func unfollow() async {
+        guard let otherUser else { return }
         do {
-            let otherUser = try await userService.unfollow(userID: user.id)
-            self.otherUser = otherUser
-            AlertManager.shared.showAlert(message: "You unfollowed " + otherUser.name)
+            let response = try await userService.unfollow(userID: otherUser.id)
+            self.otherUser = response
+            AlertManager.shared.showAlert(message: "You unfollowed " + response.name)
         }
         catch {
             AlertManager.shared.showAlert(title: "Unfollow Failed", error: error)
