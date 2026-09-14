@@ -12,4 +12,7 @@ protocol TweetServiceProtocol {
     func getTweets() async throws -> [Tweet]
     
     func getUserTweets(id: String) async throws -> [Tweet]
+    
+    func like(tweetId: String) async throws -> Tweet
+    func unlike(tweetId: String) async throws -> Tweet
 }

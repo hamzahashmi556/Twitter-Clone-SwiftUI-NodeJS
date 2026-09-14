@@ -53,6 +53,30 @@ final class FeedViewModel: ObservableObject {
         }
     }
     
+    func like(tweetId: String) async {
+        do {
+            let response = try await tweetService.like(tweetId: tweetId)
+            if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
+                self.tweets[index] = response
+            }
+        }
+        catch {
+            AlertManager.shared.showAlert(title: "Error", error: error)
+        }
+    }
+    
+    func unlike(tweetId: String) async {
+        do {
+            let response = try await tweetService.unlike(tweetId: tweetId)
+            if let index = self.tweets.firstIndex(where: { $0.id == tweetId }) {
+                self.tweets[index] = response
+            }
+        }
+        catch {
+            AlertManager.shared.showAlert(title: "Error", error: error)
+        }
+    }
+    
     private static func makeSamplePosts() -> [Tweet] {
         let sampleTweetText = "Lorem ipsum, or lipsum as it is sometimes known, is dummy text used in laying out print, graphic or web designs."
         let sampleUser = UserModel(

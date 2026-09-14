@@ -24,6 +24,8 @@ class TweetCell: UITableViewCell {
     
     @IBOutlet weak var errorLabel: UILabel!
     
+    @IBOutlet weak var btnLike: UIButton!
+    
     var profilePressed: (() -> Void)?
     
     var commentPressed: (() -> Void)?
@@ -65,6 +67,9 @@ class TweetCell: UITableViewCell {
         lblName.text = user?.name ?? post.user
         lblUserName.text = "@" + (user?.userName ?? post.userName)
         lblTweet.text = post.text
+        
+        let isLiked = post.likes.contains(UserDefaults.userID ?? "")
+        btnLike.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
         
         DispatchQueue.global().async {
             if let base64 = user?.avatar,

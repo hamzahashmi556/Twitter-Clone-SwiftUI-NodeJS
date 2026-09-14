@@ -51,4 +51,22 @@ final class TweetService: TweetServiceProtocol {
             body: nil
         )
     }
+    
+    func like(tweetId: String) async throws -> Tweet {
+        return try await client.request(
+            "\(baseURL)/like/\(tweetId)",
+            method: .post,
+            headers: headers,
+            body: nil
+        )
+    }
+    
+    func unlike(tweetId: String) async throws -> Tweet {
+        return try await client.request(
+            "\(baseURL)/unlike/\(tweetId)",
+            method: .post,
+            headers: headers,
+            body: nil
+        )
+    }
 }

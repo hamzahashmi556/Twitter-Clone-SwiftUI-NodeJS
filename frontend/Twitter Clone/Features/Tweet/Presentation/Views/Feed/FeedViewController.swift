@@ -83,6 +83,21 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let user = viewModel.otherUsers.first(where: { $0.id == tweet.userId })
         cell.configure(with: tweet, user: user)
         
+        cell.likePressed = { [weak self] in
+            guard let self = self else { return }
+            Task {
+                if tweet.likes.contains(UserDefaults.userID ?? "") {
+                    await self.viewModel.unlike(tweetId: tweet.id)
+                }
+                else {
+                    await self.viewModel.like(tweetId: tweet.id)
+                }
+                await MainActor.run {
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }
+        
         cell.profilePressed = { [weak self] in
             guard let self = self, let user else { return }
             let vc = ProfileViewController(user: user, container: container)

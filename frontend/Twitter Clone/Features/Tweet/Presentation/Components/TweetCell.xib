@@ -128,6 +128,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="btnLike" destination="sK8-CQ-kGf" id="Iib-0G-slQ"/>
                 <outlet property="errorLabel" destination="IuR-6v-2IL" id="EFE-Q6-knF"/>
                 <outlet property="lblName" destination="Pfz-bk-NvY" id="Uhk-pY-HMA"/>
                 <outlet property="lblTweet" destination="WIB-Ej-218" id="Kz1-Xf-DXI"/>
