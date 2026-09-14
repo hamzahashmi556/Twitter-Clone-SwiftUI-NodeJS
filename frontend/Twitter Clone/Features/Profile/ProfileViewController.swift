@@ -86,15 +86,20 @@ final class ProfileViewController: UIViewController {
         
         headerView.editPressed = { [weak self] in
             guard let self else { return }
-            let view = EditProfileViewController(
-                user: vm.user,
-                userUpdated: { updatedUser in
-                    self.vm.user = updatedUser
-                },
-                userService: container.userService,
-                presentingViewController: self
-            )
-            self.navigationController?.pushViewController(view, animated: true)
+            if vm.user.isCurrentUser {
+                let view = EditProfileViewController(
+                    user: vm.user,
+                    userUpdated: { updatedUser in
+                        self.vm.user = updatedUser
+                    },
+                    userService: container.userService,
+                    presentingViewController: self
+                )
+                self.navigationController?.pushViewController(view, animated: true)
+            }
+            else {
+                // Follow / Unfollow
+            }
         }
     }
 
@@ -102,7 +107,7 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(
-            TweetCell.self,
+            UINib(nibName: "TweetCell", bundle: nil),
             forCellReuseIdentifier: TweetCell.reuseIdentifier
         )
 
@@ -172,8 +177,14 @@ final class ProfileViewController: UIViewController {
 
     private func refreshHeaderContent() {
         guard isHeaderConfigured else { return }
-
-        headerView.bindData(user: vm.user, tweetCount: vm.tweets.count)
+        
+        if vm.user.isCurrentUser {
+            headerView.bindData(user: vm.user, tweetCount: vm.tweets.count)
+        }
+        else {
+            let isFollowing = vm.user.followers.contains(UserDefaults.userID ?? "")
+            headerView.bindOtherUserData(otherUser: vm.user, isFollowing: isFollowing)
+        }
         tabBarView.configure(selectedIndex: selectedTab)
     }
     

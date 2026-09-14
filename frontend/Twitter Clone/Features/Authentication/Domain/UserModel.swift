@@ -5,6 +5,7 @@
 //  Created by PSG-MDU-HAMZA on 07/09/2026.
 //
 
+import Foundation
 
 struct UserModel: Decodable, Identifiable {
     var id: String { return _id }
@@ -22,6 +23,10 @@ struct UserModel: Decodable, Identifiable {
     var location: String?
     var followers: [String]
     var followings: [String]
+    
+    var isCurrentUser: Bool {
+        return UserDefaults.userID == id
+    }
 }
 
 struct UserRequest: Encodable {

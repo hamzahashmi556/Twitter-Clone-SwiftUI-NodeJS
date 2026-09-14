@@ -23,6 +23,8 @@ class ProfileTableHeader: UICollectionReusableView {
     
     @IBOutlet weak var lblFollowerFollowing: UILabel!
     
+    @IBOutlet weak var btnEdit: UIButton!
+    
     var editPressed: (() -> Void)?
     
     @IBAction func editBtnPressed(_ sender: UIButton) {
@@ -59,6 +61,25 @@ class ProfileTableHeader: UICollectionReusableView {
     }
     
     func bindData(user: UserModel, tweetCount: Int) {
+        
+        if let base64 = user.avatar,
+           let data = Data(base64Encoded: base64) {
+            self.profileImgView.image = UIImage(data: data)
+        }
+        else {
+            self.profileImgView.image = UIImage(systemName: "person")
+        }
+        
+        self.lblName.text = user.name
+        self.lblUsername.text = user.userName
+        self.lblFollowerFollowing.text = "Followers \(user.followers.count) : Following \(user.followings.count)"
+    }
+    
+    func bindOtherUserData(otherUser user: UserModel, isFollowing: Bool) {
+        
+        let title = isFollowing ? "Unfollow" : "Follow"
+        self.btnEdit.setTitle(title, for: .normal)
+        
         if let base64 = user.avatar,
            let data = Data(base64Encoded: base64) {
             self.profileImgView.image = UIImage(data: data)

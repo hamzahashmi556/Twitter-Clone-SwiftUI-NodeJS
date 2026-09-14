@@ -24,18 +24,25 @@ class TweetCell: UITableViewCell {
     
     @IBOutlet weak var errorLabel: UILabel!
     
-    private var commentPressed: (() -> Void)?
+    var profilePressed: (() -> Void)?
     
-    private var retweetPressed: (() -> Void)?
+    var commentPressed: (() -> Void)?
     
-    private var likePressed: (() -> Void)?
+    var retweetPressed: (() -> Void)?
     
-    private var sharePressed: (() -> Void)?
+    var likePressed: (() -> Void)?
+    
+    var sharePressed: (() -> Void)?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
         profileImgView.applyCircularWithBorder()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(profileTapped))
+        tapGesture.numberOfTapsRequired = 1
+        profileImgView.addGestureRecognizer(tapGesture)
+        profileImgView.isUserInteractionEnabled = true
         
         tweetImgView.backgroundColor = .secondarySystemBackground
         tweetImgView.layer.cornerRadius = 10
@@ -43,6 +50,10 @@ class TweetCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    @objc func profileTapped() {
+        profilePressed?()
     }
     
     func configure(with post: Tweet, user: UserModel?) {

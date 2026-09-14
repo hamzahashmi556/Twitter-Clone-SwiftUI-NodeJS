@@ -12,6 +12,7 @@ import Combine
 final class FeedViewController: UIViewController {
     
     private let viewModel: FeedViewModel
+    private let container: AppContainer
     private var cancellables = Set<AnyCancellable>()
     
     private let tableView: UITableView = {
@@ -24,8 +25,12 @@ final class FeedViewController: UIViewController {
         return tableView
     }()
     
-    init(tweetService: TweetServiceProtocol, userService: UserServiceProtocol) {
-        self.viewModel = FeedViewModel(tweetService: tweetService, userService: userService)
+    init(container: AppContainer) {
+        self.container = container
+        self.viewModel = FeedViewModel(
+            tweetService: container.tweetService,
+            userService: container.userService
+        )
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -77,6 +82,13 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         let tweet = viewModel.tweets[indexPath.row]
         let user = viewModel.otherUsers.first(where: { $0.id == tweet.userId })
         cell.configure(with: tweet, user: user)
+        
+        cell.profilePressed = { [weak self] in
+            guard let self = self, let user else { return }
+            let vc = ProfileViewController(user: user, container: container)
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
         return cell
     }
     

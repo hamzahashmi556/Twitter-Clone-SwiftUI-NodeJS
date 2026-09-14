@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileTableHeader" customModule="Twitter_Clone" customModuleProvider="target">
             <connections>
+                <outlet property="btnEdit" destination="SYm-EK-Zc3" id="8Bx-2Z-RoY"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="iv3-o9-xoz"/>
                 <outlet property="imgBannerView" destination="P7K-8q-auX" id="2c6-77-KLQ"/>
                 <outlet property="lblFollowerFollowing" destination="66F-kC-8IM" id="CAe-tE-HsM"/>
