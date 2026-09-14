@@ -36,7 +36,7 @@ final class HomeViewController: UIViewController {
     
     private func setupTabs() {
         let feedVC = FeedViewController(container: container)
-        let searchVC = PlaceholderViewController(title: "Search")
+        let searchVC = SearchViewController(container: container)
         let notificationsVC = PlaceholderViewController(title: "Notifications")
         let messagesVC = PlaceholderViewController(title: "Messages")
         
