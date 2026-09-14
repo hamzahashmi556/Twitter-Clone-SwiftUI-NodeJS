@@ -40,11 +40,7 @@ final class AuthViewModel: ObservableObject {
             do {
                 let request = LoginRequest(email: email, password: password)
                 let response = try await authService.login(request: request)
-                UserDefaults.jwt = response.token
-                UserDefaults.userID = response.user.id
-                self.isAuthenticated = true
-                self.currentUser = response.user
-//                AlertManager.shared.showAlert(message: "Logged in successfully.")
+                saveTokenAndAuthenticate(response: response)
                 print("Login Complete: \(response)")
             } catch {
                 AlertManager.shared.showAlert(
@@ -53,6 +49,13 @@ final class AuthViewModel: ObservableObject {
                 print("Login Error: \(error)")
             }
         }
+    }
+    
+    private func saveTokenAndAuthenticate(response: LoginResponse) {
+        UserDefaults.jwt = response.token
+        UserDefaults.userID = response.user.id
+        self.isAuthenticated = true
+        self.currentUser = response.user
     }
     
     func register(name: String, userName: String, email: String, password: String) {
@@ -66,10 +69,8 @@ final class AuthViewModel: ObservableObject {
                     password: password,
                 )
                 let response = try await authService.register(value: value)
-                self.isAuthenticated = true
-                self.currentUser = response
+                saveTokenAndAuthenticate(response: response)
                 print("Register Completed: \(response)")
-//                AlertManager.shared.showAlert(message: "User Registered.")
                 
             }
             catch {

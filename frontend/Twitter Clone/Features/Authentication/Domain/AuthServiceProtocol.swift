@@ -8,7 +8,7 @@
 
 protocol AuthServiceProtocol {
     
-    func register(value: UserRequest) async throws -> UserModel
+    func register(value: UserRequest) async throws -> LoginResponse
     
     func login(request: LoginRequest) async throws -> LoginResponse
 }

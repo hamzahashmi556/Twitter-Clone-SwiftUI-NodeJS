@@ -24,9 +24,8 @@ class AuthService: AuthServiceProtocol {
         return try await client.request(endpoint, method: .post, headers: headers, body: body)
     }
     
-    func register(value: UserRequest) async throws -> UserModel {
+    func register(value: UserRequest) async throws -> LoginResponse {
         let data = try JSONEncoder().encode(value)
-        let response: UserModel = try await client.request(baseURL, method: .post, headers: headers, body: data)
-        return response
+        return try await client.request(baseURL, method: .post, headers: headers, body: data)
     }
 }

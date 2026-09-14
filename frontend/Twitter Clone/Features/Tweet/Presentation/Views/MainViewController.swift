@@ -12,6 +12,7 @@ import Combine
 final class MainViewController: UIViewController {
     private var user: UserModel?
     private let container: AppContainer
+    private let authVM: AuthViewModel
     
     private let slideMenuViewController: SlideMenuViewController
     private let homeViewController: HomeViewController
@@ -24,17 +25,10 @@ final class MainViewController: UIViewController {
     init(user: UserModel?, container: AppContainer, authVM: AuthViewModel) {
         self.user = user
         self.container = container
+        self.authVM = authVM
         self.homeViewController = HomeViewController(container: container)
         self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         super.init(nibName: nil, bundle: nil)
-        self.slideMenuViewController.onProfileTapped = { [weak self] in
-            guard let self, let user = authVM.currentUser else { return }
-            let profileVC = ProfileViewController(
-                user: user,
-                container: container
-            )
-            self.navigationController?.pushViewController(profileVC, animated: true)
-        }
         self.bindListeners(authVM: authVM)
     }
     
@@ -55,6 +49,20 @@ final class MainViewController: UIViewController {
         setupChildren()
         
         setupGestures()
+        
+        self.slideMenuViewController.onProfileTapped = { [weak self] in
+            guard let self, let user = authVM.currentUser else { return }
+            let profileVC = ProfileViewController(
+                user: user,
+                container: container
+            )
+            self.navigationController?.pushViewController(profileVC, animated: true)
+        }
+        slideMenuViewController.onLogoutTapped = { [weak self] in
+            self?.authVM.logout()
+        }
+        
+        
         homeViewController.onDimmerTapped = { [weak self] in
             self?.closeMenu()
         }
@@ -86,14 +94,17 @@ final class MainViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        AlertManager.shared.$isPresented
-            .combineLatest(AlertManager.shared.$errorMsg)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] (isPresented, message) in
-                guard let self, isPresented else { return }
-                self.presentAlert(title: "Alert", message: message)
-            }
-            .store(in: &cancellables)
+        Publishers.CombineLatest3(
+            AlertManager.shared.$isPresented,
+            AlertManager.shared.$title,
+            AlertManager.shared.$errorMsg
+        )
+        .receive(on: RunLoop.main)
+        .sink { [weak self] (isPresented, title, message) in
+            guard let self, isPresented else { return }
+            self.presentAlert(title: title, message: message)
+        }
+        .store(in: &cancellables)
     }
     
     private func setupChildren() {

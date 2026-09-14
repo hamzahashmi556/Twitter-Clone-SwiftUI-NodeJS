@@ -10,6 +10,7 @@ import Combine
 
 final class SlideMenuViewController: UIViewController {
     var onProfileTapped: (() -> Void)?
+    var onLogoutTapped: (() -> Void)?
     
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "logo"))
@@ -123,11 +124,15 @@ final class SlideMenuViewController: UIViewController {
         menuItems.forEach { title in
             menuStack.addArrangedSubview(makeMenuButton(title: title))
         }
+        
+        let logoutButton = makePlainButton(title: "Logout")
+        logoutButton.addTarget(self, action: #selector(logout), for: .touchUpInside)
+        logoutButton.setTitleColor(UIColor.red, for: .normal)
+        
+        let settingsBtn = makePlainButton(title: "Settings and privacy")
+        let helpBtn = makePlainButton(title: "Help centre")
 
-        let footerStack = UIStackView(arrangedSubviews: [
-            makePlainButton(title: "Settings and privacy"),
-            makePlainButton(title: "Help centre")
-        ])
+        let footerStack = UIStackView(arrangedSubviews: [settingsBtn, helpBtn, logoutButton])
         footerStack.axis = .vertical
         footerStack.spacing = 18
 
@@ -160,6 +165,10 @@ final class SlideMenuViewController: UIViewController {
             avatarImageView.widthAnchor.constraint(equalToConstant: 60),
             avatarImageView.heightAnchor.constraint(equalToConstant: 60)
         ])
+    }
+    
+    @objc func logout() {
+        onLogoutTapped?()
     }
 
     private func updateUI(with user: UserModel?) {

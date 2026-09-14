@@ -29,6 +29,20 @@ final class UserService: UserServiceProtocol {
         return try await client.request(endpoint, method: .get, headers: [:], body: nil)
     }
     
+    func getUsers(searchQuery: String) async throws -> [UserModel] {
+        var components = URLComponents(string: baseURL)
+        let trimmedQuery = searchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmedQuery.isEmpty {
+            components?.queryItems = [URLQueryItem(name: "search", value: trimmedQuery)]
+        }
+        
+        guard let endpoint = components?.url?.absoluteString else {
+            throw APIClientError.invalidURL
+        }
+        
+        return try await client.request(endpoint, method: .get, headers: headers, body: nil)
+    }
+    
     func updateProfilePicture(image: Data) async throws -> UserImageResponse {
         return try await ImageUploader.uploadMultipart(
             urlPath: baseURL + "/me/avatar",

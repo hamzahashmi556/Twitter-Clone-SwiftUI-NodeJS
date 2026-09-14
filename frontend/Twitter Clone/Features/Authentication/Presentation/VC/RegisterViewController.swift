@@ -16,6 +16,8 @@ final class RegisterViewController: UIViewController {
     
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
+    private let nameField = UITextField()
+    private let userNameField = UITextField()
     private let emailField = UITextField()
     private let passwordField = UITextField()
     private let passwordToggleButton = UIButton(type: .system)
@@ -57,22 +59,24 @@ final class RegisterViewController: UIViewController {
 //            action: #selector(didTapCancel)
 //        )
         
-        titleLabel.text = "Log in to Twitter"
+        titleLabel.text = "Create your account"
         titleLabel.font = .systemFont(ofSize: 30, weight: .heavy)
         titleLabel.textAlignment = .center
         titleLabel.numberOfLines = 0
         
-        subtitleLabel.text = "Enter your email and password to continue."
+        subtitleLabel.text = "Enter your details to join Twitter."
         subtitleLabel.font = .systemFont(ofSize: 15, weight: .regular)
         subtitleLabel.textColor = .secondaryLabel
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
         
-        configureTextField(emailField, placeholder: "Phone, email, or username")
+        configureTextField(nameField, placeholder: "Name")
+        configureTextField(userNameField, placeholder: "Username")
+        configureTextField(emailField, placeholder: "Email")
         configureTextField(passwordField, placeholder: "Password", isSecure: true)
         configurePasswordToggle()
         
-        loginButton.setTitle("Log in", for: .normal)
+        loginButton.setTitle("Create account", for: .normal)
         stylePrimaryButton(loginButton)
         
         formStack.axis = .vertical
@@ -80,6 +84,8 @@ final class RegisterViewController: UIViewController {
         formStack.translatesAutoresizingMaskIntoConstraints = false
         formStack.addArrangedSubview(titleLabel)
         formStack.addArrangedSubview(subtitleLabel)
+        formStack.addArrangedSubview(nameField)
+        formStack.addArrangedSubview(userNameField)
         formStack.addArrangedSubview(emailField)
         formStack.addArrangedSubview(passwordField)
         formStack.addArrangedSubview(loginButton)
@@ -138,15 +144,17 @@ final class RegisterViewController: UIViewController {
     }
     
     @objc private func didTapLogin() {
+        let name = nameField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let userName = userNameField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let email = emailField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let password = passwordField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
-        guard !email.isEmpty, !password.isEmpty else {
-            presentAlert(title: "Missing Info", message: "Please enter your email and password.")
+        guard !name.isEmpty, !userName.isEmpty, !email.isEmpty, !password.isEmpty else {
+            presentAlert(title: "Missing Info", message: "Please enter your name, username, email, and password.")
             return
         }
         
-        viewModel.login(email: email, password: password)
+        viewModel.register(name: name, userName: userName, email: email, password: password)
     }
     
     @objc private func didTapPasswordToggle() {

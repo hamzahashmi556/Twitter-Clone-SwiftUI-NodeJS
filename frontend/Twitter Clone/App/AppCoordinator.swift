@@ -15,12 +15,17 @@ final class AppCoordinator {
     private var authVM: AuthViewModel
 
     init(window: UIWindow, container: AppContainer) {
+        print("AppCoordinator init")
         self.window = window
         self.container = container
         self.authVM = AuthViewModel(
             authService: container.authService,
             userService: container.userService
         )
+    }
+    
+    deinit {
+        print("AppCoordinator deinit")
     }
 
     func start() {
@@ -32,6 +37,9 @@ final class AppCoordinator {
                 guard let self else { return }
                 if isAuthenticated {
                     self.showMainFlow(user: authVM.currentUser)
+                }
+                else {
+                    self.showAuthFlow()
                 }
             }
             .store(in: &cancellables)
