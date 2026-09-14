@@ -9,7 +9,7 @@
 import UIKit
 import Combine
 
-final class MainViewController: UIViewController {
+final class MainViewController: BaseViewController {
     private var user: UserModel?
     private let container: AppContainer
     private let authVM: AuthViewModel
@@ -93,18 +93,6 @@ final class MainViewController: UIViewController {
                 self?.user = currentUser
             }
             .store(in: &cancellables)
-        
-        Publishers.CombineLatest3(
-            AlertManager.shared.$isPresented,
-            AlertManager.shared.$title,
-            AlertManager.shared.$errorMsg
-        )
-        .receive(on: RunLoop.main)
-        .sink { [weak self] (isPresented, title, message) in
-            guard let self, isPresented else { return }
-            self.presentAlert(title: title, message: message)
-        }
-        .store(in: &cancellables)
     }
     
     private func setupChildren() {
@@ -176,12 +164,6 @@ final class MainViewController: UIViewController {
         default:
             break
         }
-    }
-    
-    private func presentAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
     }
     
     private func presentComposeAlert() {

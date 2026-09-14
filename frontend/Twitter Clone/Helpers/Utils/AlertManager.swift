@@ -30,4 +30,10 @@ final class AlertManager: ObservableObject {
         self.errorMsg = error.localizedDescription
         isPresented = true
     }
+    
+    func dismiss() {
+        self.isPresented = false
+        self.title.removeAll()
+        self.errorMsg.removeAll()
+    }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class WelcomeViewController: UIViewController {
+final class WelcomeViewController: BaseViewController {
     
     var onLoginTapped: (() -> Void)?
     var onRegisterTapped: (() -> Void)?

@@ -54,7 +54,7 @@ router.post('/users/login', async (req, res) => {
         res.send({ user, token })
     }
     catch (e) {
-        res.status(500).send(e)
+        res.status(500).send(e.message)
         console.log(e)
     }
 })
