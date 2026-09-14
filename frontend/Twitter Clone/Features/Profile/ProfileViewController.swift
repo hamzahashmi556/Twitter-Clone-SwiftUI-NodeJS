@@ -64,7 +64,11 @@ final class ProfileViewController: UIViewController {
 
     init(user: UserModel, container: AppContainer) {
         self.container = container
-        self.vm = ProfileViewModel(user: user, tweetService: container.tweetService)
+        self.vm = ProfileViewModel(
+            user: user,
+            tweetService: container.tweetService,
+            userService: container.userService
+        )
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -99,6 +103,18 @@ final class ProfileViewController: UIViewController {
             }
             else {
                 // Follow / Unfollow
+                Task {
+                    let isFollowing = self.vm.user.followers.contains(UserDefaults.userID ?? "")
+                    if isFollowing {
+                        await self.vm.unfollow()
+                    }
+                    else {
+                        await self.vm.follow()
+                    }
+                    await MainActor.run {
+                        self.refreshHeaderContent()
+                    }
+                }
             }
         }
     }

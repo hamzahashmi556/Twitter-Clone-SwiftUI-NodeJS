@@ -47,4 +47,20 @@ final class UserService: UserServiceProtocol {
             body: body
         )
     }
+    
+    func follow(userID: String) async throws -> UserModel {
+        return try await client.request(
+            "\(baseURL)/follow/\(userID)",
+            method: .put,
+            headers: headers
+        )
+    }
+    
+    func unfollow(userID: String) async throws -> UserModel {
+        return try await client.request(
+            "\(baseURL)/unfollow/\(userID)",
+            method: .put,
+            headers: headers
+        )
+    }
 }

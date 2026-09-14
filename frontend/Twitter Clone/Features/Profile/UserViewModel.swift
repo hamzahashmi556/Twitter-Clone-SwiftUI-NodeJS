@@ -15,10 +15,12 @@ class ProfileViewModel {
     
     var user: UserModel
     let tweetService: TweetServiceProtocol
+    let userService: UserServiceProtocol
     
-    init(user: UserModel, tweetService: TweetServiceProtocol) {
+    init(user: UserModel, tweetService: TweetServiceProtocol, userService: UserServiceProtocol) {
         self.user = user
         self.tweetService = tweetService
+        self.userService = userService
         self.getTweets()
     }
     
@@ -35,4 +37,27 @@ class ProfileViewModel {
             self.isLoading = false
         }
     }
+    
+    func follow() async {
+        do {
+            let user = try await userService.follow(userID: user.id)
+            self.user = user
+            AlertManager.shared.showAlert(message: "You followed " + user.name)
+        }
+        catch {
+            AlertManager.shared.showAlert(title: "Follow Failed", error: error)
+        }
+    }
+    
+    func unfollow() async {
+        do {
+            let user = try await userService.unfollow(userID: user.id)
+            self.user = user
+            AlertManager.shared.showAlert(message: "You unfollowed " + user.name)
+        }
+        catch {
+            AlertManager.shared.showAlert(title: "Unfollow Failed", error: error)
+        }
+    }
+
 }

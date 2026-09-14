@@ -14,4 +14,8 @@ protocol UserServiceProtocol {
     func updateProfilePicture(image: Data) async throws -> UserImageResponse
     
     func updateUser(id: String, request: UserUpdateRequest) async throws -> UserModel
+    
+    func follow(userID: String) async throws -> UserModel
+    
+    func unfollow(userID: String) async throws -> UserModel
 }
