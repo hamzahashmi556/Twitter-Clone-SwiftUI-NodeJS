@@ -12,13 +12,15 @@ final class HomeViewController: UIViewController {
     private let contentTabBarController = UITabBarController()
     private let composeButton = UIButton(type: .system)
     private let container: AppContainer
+    private let authVM: AuthViewModel
     private let dimmingView = UIView()
     
     var onDimmerTapped: (() -> Void)?
     var onComposeTapped: (() -> Void)?
     
-    init(container: AppContainer) {
+    init(container: AppContainer, authVM: AuthViewModel) {
         self.container = container
+        self.authVM = authVM
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -35,8 +37,8 @@ final class HomeViewController: UIViewController {
     }
     
     private func setupTabs() {
-        let feedVC = FeedViewController(container: container)
-        let searchVC = SearchViewController(container: container)
+        let feedVC = FeedViewController(container: container, authVM: authVM)
+        let searchVC = SearchViewController(container: container, authVM: authVM)
         let notificationsVC = PlaceholderViewController(title: "Notifications")
         let messagesVC = PlaceholderViewController(title: "Messages")
         

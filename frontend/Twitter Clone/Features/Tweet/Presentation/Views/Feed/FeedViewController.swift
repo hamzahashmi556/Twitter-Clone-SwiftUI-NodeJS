@@ -11,6 +11,7 @@ import Combine
 
 final class FeedViewController: UIViewController {
     
+    private let authVM: AuthViewModel
     private let viewModel: FeedViewModel
     private let container: AppContainer
     private var cancellables = Set<AnyCancellable>()
@@ -25,8 +26,9 @@ final class FeedViewController: UIViewController {
         return tableView
     }()
     
-    init(container: AppContainer) {
+    init(container: AppContainer, authVM: AuthViewModel) {
         self.container = container
+        self.authVM = authVM
         self.viewModel = FeedViewModel(
             tweetService: container.tweetService,
             userService: container.userService
@@ -80,8 +82,8 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         let tweet = viewModel.tweets[indexPath.row]
-        let user = viewModel.otherUsers.first(where: { $0.id == tweet.userId })
-        cell.configure(with: tweet, user: user)
+        let otherUser = viewModel.otherUsers.first(where: { $0.id == tweet.userId })
+        cell.configure(with: tweet, user: otherUser)
         
         cell.likePressed = { [weak self] in
             guard let self = self else { return }
@@ -99,9 +101,14 @@ extension FeedViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         cell.profilePressed = { [weak self] in
-            guard let self = self, let user else { return }
-            let vc = ProfileViewController(user: user, container: container)
-            self.navigationController?.pushViewController(vc, animated: true)
+            guard let self = self, let otherUser else { return }
+            if let user = authVM.currentUser {
+                let vc = ProfileViewController(user: user, otherUser: otherUser, container: container)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            else {
+                AlertManager.shared.showUserMissing()
+            }
         }
         
         return cell

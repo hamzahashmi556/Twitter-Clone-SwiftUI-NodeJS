@@ -31,6 +31,12 @@ final class AlertManager: ObservableObject {
         isPresented = true
     }
     
+    func showUserMissing() {
+        self.isPresented = true
+        self.title = "User Missing"
+        self.errorMsg = "Please login again, user found missing or network error"
+    }
+    
     func dismiss() {
         self.isPresented = false
         self.title.removeAll()

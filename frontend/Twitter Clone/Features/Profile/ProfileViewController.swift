@@ -62,10 +62,11 @@ final class ProfileViewController: UIViewController {
     
     private let container: AppContainer
 
-    init(user: UserModel, container: AppContainer) {
+    init(user: UserModel, otherUser: UserModel?, container: AppContainer) {
         self.container = container
         self.vm = ProfileViewModel(
             user: user,
+            otherUser: otherUser,
             tweetService: container.tweetService,
             userService: container.userService
         )
@@ -90,21 +91,10 @@ final class ProfileViewController: UIViewController {
         
         headerView.editPressed = { [weak self] in
             guard let self else { return }
-            if vm.user.isCurrentUser {
-                let view = EditProfileViewController(
-                    user: vm.user,
-                    userUpdated: { updatedUser in
-                        self.vm.user = updatedUser
-                    },
-                    userService: container.userService,
-                    presentingViewController: self
-                )
-                self.navigationController?.pushViewController(view, animated: true)
-            }
-            else {
-                // Follow / Unfollow
+            if let otherUser = vm.otherUser {
+                // Follow / Unfollow other user
                 Task {
-                    let isFollowing = self.vm.user.followers.contains(UserDefaults.userID ?? "")
+                    let isFollowing = otherUser.followers.contains(self.vm.user.id)
                     if isFollowing {
                         await self.vm.unfollow()
                     }
@@ -115,6 +105,17 @@ final class ProfileViewController: UIViewController {
                         self.refreshHeaderContent()
                     }
                 }
+            }
+            else { // edit profile your own user
+                let view = EditProfileViewController(
+                    user: vm.user,
+                    userUpdated: { updatedUser in
+                        self.vm.user = updatedUser
+                    },
+                    userService: container.userService,
+                    presentingViewController: self
+                )
+                self.navigationController?.pushViewController(view, animated: true)
             }
         }
     }
@@ -194,12 +195,12 @@ final class ProfileViewController: UIViewController {
     private func refreshHeaderContent() {
         guard isHeaderConfigured else { return }
         
-        if vm.user.isCurrentUser {
-            headerView.bindData(user: vm.user, tweetCount: vm.tweets.count)
+        if let otherUser = vm.otherUser {
+            let isFollowing = otherUser.followers.contains(vm.user.id)
+            headerView.bindOtherUserData(otherUser: otherUser, isFollowing: isFollowing)
         }
         else {
-            let isFollowing = vm.user.followers.contains(UserDefaults.userID ?? "")
-            headerView.bindOtherUserData(otherUser: vm.user, isFollowing: isFollowing)
+            headerView.bindData(user: vm.user, tweetCount: vm.tweets.count)
         }
         tabBarView.configure(selectedIndex: selectedTab)
     }

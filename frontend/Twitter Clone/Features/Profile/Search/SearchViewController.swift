@@ -8,6 +8,9 @@
 import UIKit
 
 final class SearchViewController: UIViewController {
+    
+    
+    private let authVM: AuthViewModel
     private let container: AppContainer
     private let viewModel: SearchViewModel
     private var searchWorkItem: DispatchWorkItem?
@@ -50,8 +53,9 @@ final class SearchViewController: UIViewController {
         return indicator
     }()
 
-    init(container: AppContainer) {
+    init(container: AppContainer, authVM: AuthViewModel) {
         self.container = container
+        self.authVM = authVM
         self.viewModel = SearchViewModel(userService: container.userService)
         super.init(nibName: nil, bundle: nil)
     }
@@ -181,8 +185,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let user = viewModel.users[indexPath.row]
-        let profileViewController = ProfileViewController(user: user, container: container)
-        navigationController?.pushViewController(profileViewController, animated: true)
+        let otherUser = viewModel.users[indexPath.row]
+        if let user = authVM.currentUser {
+            let profileViewController = ProfileViewController(user: user, otherUser: otherUser, container: container)
+            navigationController?.pushViewController(profileViewController, animated: true)
+        }
+        else {
+            AlertManager.shared.showUserMissing()
+        }
     }
 }

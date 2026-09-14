@@ -10,7 +10,6 @@ import UIKit
 import Combine
 
 final class MainViewController: BaseViewController {
-    private var user: UserModel?
     private let container: AppContainer
     private let authVM: AuthViewModel
     
@@ -22,14 +21,12 @@ final class MainViewController: BaseViewController {
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(user: UserModel?, container: AppContainer, authVM: AuthViewModel) {
-        self.user = user
+    init(container: AppContainer, authVM: AuthViewModel) {
         self.container = container
         self.authVM = authVM
-        self.homeViewController = HomeViewController(container: container)
+        self.homeViewController = HomeViewController(container: container, authVM: authVM)
         self.slideMenuViewController = SlideMenuViewController(authVM: authVM)
         super.init(nibName: nil, bundle: nil)
-        self.bindListeners(authVM: authVM)
     }
     
     required init?(coder: NSCoder) {
@@ -54,6 +51,7 @@ final class MainViewController: BaseViewController {
             guard let self, let user = authVM.currentUser else { return }
             let profileVC = ProfileViewController(
                 user: user,
+                otherUser: nil,
                 container: container
             )
             self.navigationController?.pushViewController(profileVC, animated: true)
@@ -67,7 +65,7 @@ final class MainViewController: BaseViewController {
             self?.closeMenu()
         }
         homeViewController.onComposeTapped = { [weak self] in
-            guard let self, let user else { return }
+            guard let self, let user = authVM.currentUser else { return }
             let createSheet = CreateTweetViewController(
                 tweetService: container.tweetService,
                 user: user
@@ -80,19 +78,6 @@ final class MainViewController: BaseViewController {
         super.viewDidLayoutSubviews()
         let menuWidth = max(view.bounds.width - 90, 240)
         slideMenuWidthConstraint?.constant = menuWidth
-    }
-    
-    func bindData(user: UserModel?) {
-        self.user = user
-    }
-    
-    private func bindListeners(authVM: AuthViewModel) {
-        authVM.$currentUser
-            .receive(on: RunLoop.main)
-            .sink { [weak self] currentUser in
-                self?.user = currentUser
-            }
-            .store(in: &cancellables)
     }
     
     private func setupChildren() {

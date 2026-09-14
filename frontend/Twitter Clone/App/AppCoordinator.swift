@@ -83,7 +83,7 @@ final class AppCoordinator {
     }
 
     private func showMainFlow(user: UserModel?) {
-        let mainVC = MainViewController(user: user, container: container, authVM: authVM)
+        let mainVC = MainViewController(container: container, authVM: authVM)
         let navVC = UINavigationController(rootViewController: mainVC)
         window.rootViewController = navVC
         window.makeKeyAndVisible()
