@@ -143,20 +143,23 @@ router.get('/users/:id/avatar', async (req, res) => {
 })
 
 // Route for following
-router.put('/users/:id/follow', auth, async (req, res) => {
+router.put('/users/follow/:id', auth, async (req, res) => {
     const myId = req.user.id
     const userId = req.params.id
     console.log('user id 1 ' + myId)
     console.log('user id 2 ' + userId)
     if (myId != userId) {
         try {
-            const user = await User.findById(userId)
+            var user = await User.findById(userId)
             if (!user.followers.includes(myId)) {
                 // insert my id in his followers
                 await user.updateOne({ $push: { followers: myId } })
                 // insert his id in my following
                 await req.user.updateOne({ $push: { followings: userId } })
-                res.status(200).send('you followed ' + user.name)
+
+                // fetch fresh user again since locally its not updating, because fresh response is necessary in frontend
+                const response = await User.findById(userId)
+                res.status(200).send(response)
             }
             else {
                 res.status(403).send('you aree already following ' + user.name)
@@ -164,7 +167,7 @@ router.put('/users/:id/follow', auth, async (req, res) => {
 
         }
         catch (error) {
-            res.status(500).json(error)
+            res.status(500).json(error.message)
         }
     } else {
         res.status(403).send('Cannot unfollow your own user')
@@ -172,20 +175,23 @@ router.put('/users/:id/follow', auth, async (req, res) => {
 })
 
 // Unfollow User
-router.put('/users/:id/unfollow', auth, async (req, res) => {
+router.put('/users/unfollow/:id', auth, async (req, res) => {
     const myId = req.user.id
     const userId = req.params.id
     console.log('user id 1 ' + myId)
     console.log('user id 2 ' + userId)
     if (myId != userId) {
         try {
-            const user = await User.findById(userId)
+            var user = await User.findById(userId)
             if (user.followers.includes(myId)) {
                 // remove my id in his followers
                 await user.updateOne({ $pull: { followers: myId } })
                 // remove his id in my following
                 await req.user.updateOne({ $pull: { followings: userId } })
-                res.status(200).send('you unfollowed ' + user.name)
+
+                // fetch fresh user again since locally its not updating, because fresh response is necessary in frontend
+                const response = await User.findById(userId)
+                res.status(200).send(response)
             }
             else {
                 res.status(403).send('cannot unfollow, you don\'t follow ' + user.name)
