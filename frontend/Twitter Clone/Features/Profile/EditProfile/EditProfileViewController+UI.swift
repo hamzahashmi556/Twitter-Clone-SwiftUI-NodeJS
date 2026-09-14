@@ -27,10 +27,7 @@ extension EditProfileViewController {
 
         scrollView.addSubview(contentView)
 
-        contentView.addSubview(bannerImageView)
-        contentView.addSubview(profileImageContainer)
-
-        profileImageContainer.addSubview(profileImageView)
+        contentView.addSubview(profileHeader)
 
         contentView.addSubview(nameField)
         contentView.addSubview(locationField)
@@ -47,9 +44,7 @@ extension EditProfileViewController {
         [
             scrollView,
             contentView,
-            bannerImageView,
-            profileImageContainer,
-            profileImageView,
+            profileHeader,
             nameField,
             locationField,
             bioField,
@@ -94,54 +89,23 @@ extension EditProfileViewController {
             ),
 
             // MARK: Banner
-
-            bannerImageView.topAnchor.constraint(
+            profileHeader.topAnchor.constraint(
                 equalTo: contentView.topAnchor
             ),
-            bannerImageView.leadingAnchor.constraint(
+            profileHeader.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor
             ),
-            bannerImageView.trailingAnchor.constraint(
+            profileHeader.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor
             ),
-            bannerImageView.heightAnchor.constraint(
-                equalToConstant: 180
-            ),
-
-            // MARK: Profile Image
-
-            profileImageContainer.topAnchor.constraint(
-                equalTo: bannerImageView.bottomAnchor,
-                constant: -45
-            ),
-            profileImageContainer.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 16
-            ),
-            profileImageContainer.widthAnchor.constraint(
-                equalToConstant: 90
-            ),
-            profileImageContainer.heightAnchor.constraint(
-                equalToConstant: 90
-            ),
-
-            profileImageView.centerXAnchor.constraint(
-                equalTo: profileImageContainer.centerXAnchor
-            ),
-            profileImageView.centerYAnchor.constraint(
-                equalTo: profileImageContainer.centerYAnchor
-            ),
-            profileImageView.widthAnchor.constraint(
-                equalToConstant: 75
-            ),
-            profileImageView.heightAnchor.constraint(
-                equalToConstant: 75
+            profileHeader.heightAnchor.constraint(
+                equalToConstant: 210
             ),
 
             // MARK: Name
 
             nameField.topAnchor.constraint(
-                equalTo: profileImageContainer.bottomAnchor,
+                equalTo: profileHeader.bottomAnchor,
                 constant: 16
             ),
             nameField.leadingAnchor.constraint(
